@@ -92,6 +92,7 @@ namespace MugPlugin
             };
 
             double[,] pointsArcArray = {
+                //TODO: RSDN
                 {-halfInteriorBaseWidth, -epaisseur, -(halfBodyWidth - epaisseur - 3)+2, -(halfBodyLenght-epaisseur), -(halfBodyWidth - epaisseur), -bodyLength} // 7-8
             };
 
@@ -134,12 +135,17 @@ namespace MugPlugin
             };
 
             // Определение линий для замыкания ручки
-            double[,] handleLines = {
-                { -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
-                  -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1), 1 }, // Подключение внизу
-                { -halfBodyWidth, -(handleHeight - handleOffset),
-                  -halfBodyWidth, -(handleHeight - handleOffset - handleThickness), 1 } // Подключение сверху
-            };
+            double[,] handleLines = 
+                {
+                    { 
+                        -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
+                        -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1), 1 
+                    }, // Подключение внизу
+                    { 
+                        -halfBodyWidth, -(handleHeight - handleOffset),
+                        -halfBodyWidth, -(handleHeight - handleOffset - handleThickness), 1
+                    } // Подключение сверху
+                };
 
             // Рисование дуг
             this._wrapper.CreateArc(handleArcArray, 0, handleArcArray.GetLength(0));

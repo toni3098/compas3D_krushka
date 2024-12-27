@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace MugPlugin
@@ -230,7 +229,11 @@ namespace MugPlugin
         {
             ClearErrors();
             int value;
-            bool isValid = int.TryParse(L_textBox.Text, out value) && value >= 100 && value <= 150;
+            bool isValid = int.TryParse(L_textBox.Text, out value) &&
+                value >= 100 &&
+                value <= 150 &&
+                double.TryParse(diameterD1_textBox.Text, out double diameterD1) &&
+                diameterD1 < value;
             L_textBox.BackColor = isValid ? Color.White : Color.Red;
             CheckTextBox();
             ShowErrors();
@@ -244,9 +247,21 @@ namespace MugPlugin
         /// <param name="e">Аргументы события.</param>
         private void create_button_Click(object sender, EventArgs e)
         {
-            // Переменная для отслеживания наличия ошибок
+            // Переменная для отслеживания наличия ошибок 
             bool hasError = false;
-            string errorMessage = "Пожалуйста, исправьте ошибки:\n"; // Сообщение об ошибке
+            string errorMessage = "Пожалуйста, исправьте ошибки:\n";
+
+            // Проверка на пустые текстовые поля
+            if (string.IsNullOrWhiteSpace(diameterD1_textBox.Text) ||
+                string.IsNullOrWhiteSpace(diameterD4_textBox.Text) ||
+                string.IsNullOrWhiteSpace(radiusR1_textBox.Text) ||
+                string.IsNullOrWhiteSpace(radiusR3_textBox.Text) ||
+                string.IsNullOrWhiteSpace(radiusR5_textBox.Text) ||
+                string.IsNullOrWhiteSpace(L_textBox.Text))
+            {
+                hasError = true;
+                errorMessage += "• Все поля должны быть заполнены.\n";
+            }
 
             // Проверка всех полей на наличие ошибок
             if (this.diameterD4_textBox.BackColor == Color.Red)
@@ -517,6 +532,7 @@ namespace MugPlugin
         /// </summary>
         /// <param name="textBox">Используемый текстбокс.</param>
         /// <param name="parameterType">Тип параметра.</param>
+
         private void ValidateValue(System.Windows.Forms.TextBox textBox, ParameterType parameterType)
         {
             bool cached = false;
@@ -567,23 +583,189 @@ namespace MugPlugin
             catch (Exception e)
             {
                 this.BackColor(parameterType, 2, 1, e.Message);
-                cached = true;
+                cached = true; // Установка флага кэширования в true при ошибке
             }
 
             if (!cached)
             {
+                double D1; // Объявление переменной для D1
+
+                // Получение значения D1 из diameterD1_textbox
                 try
                 {
-                    // Передача значения параметра вместо объекта
-                    this._parameters.SetParameter(parameterType, parameter.Value, parameter.MinValue, parameter.MaxValue);
-                    this.BackColor(parameterType, 3, 0, string.Empty);
+                    D1 = double.Parse(this.diameterD1_textBox.Text); // Преобразование текста в число
                 }
                 catch (Exception e)
                 {
-                    this.BackColor(parameterType, 2, 0, e.Message);
+                    this.BackColor(parameterType, 2, 1, "Ошибка при чтении D1: " + e.Message);
+                    return; // Выход из метода при ошибке
+                }
+
+                // Проверка BaseWidth и BodyLength относительно D1
+                if (parameterType == ParameterType.BaseWidth && parameter.Value >= D1)
+                {
+                    this.BackColor(parameterType, 2, 1, "BaseWidth должно быть меньше D1.");
+                    cached = true; // Установка флага кэширования в true при ошибке
+                }
+                else if (parameterType == ParameterType.BodyLength && parameter.Value <= D1)
+                {
+                    this.BackColor(parameterType, 2, 1, "BodyLength должно быть больше D1.");
+                    cached = true; // Установка флага кэширования в true при ошибке
+                }
+
+                if (!cached)
+                {
+                    // Проверка на диапазон значений
+                    if (parameter.Value < parameter.MinValue || parameter.Value > parameter.MaxValue)
+                    {
+                        this.BackColor(parameterType, 2, 1, $"Значение должно быть между {parameter.MinValue} и {parameter.MaxValue}.");
+                        cached = true; // Установка флага кэширования в true при ошибке
+                    }
+                }
+
+                if (!cached)
+                {
+                    try
+                    {
+                        // Передача значения параметра вместо объекта
+                        this._parameters.SetParameter(parameterType, parameter.Value, parameter.MinValue, parameter.MaxValue);
+                        this.BackColor(parameterType, 3, 0, string.Empty);
+                    }
+                    catch (Exception e)
+                    {
+                        this.BackColor(parameterType, 2, 0, e.Message);
+                    }
                 }
             }
         }
 
+
+
+
     }
 }
+
+
+
+
+
+/*
+private void ValidateValue(System.Windows.Forms.TextBox textBox, ParameterType parameterType)
+{
+    bool cached = false;
+    ParameterValue parameter = new ParameterValue();
+
+    // Инициализация объекта ParameterValue для новых параметров
+    switch (parameterType)
+    {
+        case ParameterType.BodyWidth:
+            parameter.MaxValue = 150;
+            parameter.MinValue = 100;
+            break;
+
+        case ParameterType.BaseWidth:
+            parameter.MaxValue = 100;
+            parameter.MinValue = 70;
+            break;
+
+        case ParameterType.BodyRadius1:
+            parameter.MaxValue = 350;
+            parameter.MinValue = 300;
+            break;
+
+        case ParameterType.HandleRadius3:
+            parameter.MaxValue = 20;
+            parameter.MinValue = 10;
+            break;
+
+        case ParameterType.HandleRadius5:
+            parameter.MaxValue = 85;
+            parameter.MinValue = 75;
+            break;
+
+        case ParameterType.BodyLength:
+            parameter.MaxValue = 150;
+            parameter.MinValue = 100;
+            break;
+
+        default:
+            throw new ArgumentException("Неизвестный тип параметра.");
+    }
+
+    try
+    {
+        // Попытка преобразовать текст в число
+        parameter.Value = int.Parse(textBox.Text);
+    }
+    catch (Exception e)
+    {
+        this.BackColor(parameterType, 2, 1, e.Message);
+        cached = true;
+    }
+
+    if (!cached)
+    {
+        try
+        {
+            // Передача значения параметра вместо объекта
+            this._parameters.SetParameter(parameterType, parameter.Value, parameter.MinValue, parameter.MaxValue);
+            this.BackColor(parameterType, 3, 0, string.Empty);
+        }
+        catch (Exception e)
+        {
+            this.BackColor(parameterType, 2, 0, e.Message);
+        }
+    }
+}
+*/
+
+/*
+// Переменная для отслеживания наличия ошибок
+bool hasError = false;
+string errorMessage = "Пожалуйста, исправьте ошибки:\n"; // Сообщение об ошибке
+
+// Проверка всех полей на наличие ошибок
+if (this.diameterD4_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Диаметр основания (D4) неверен.\n";
+}
+if (this.diameterD1_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Диаметр тела (D1) неверен.\n";
+}
+if (this.radiusR1_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Радиус тела (R1) неверен.\n";
+}
+if (this.radiusR3_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Радиус ручки (R3) неверен.\n";
+}
+if (this.radiusR5_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Радиус ручки (R5) неверен.\n";
+}
+if (this.L_textBox.BackColor == Color.Red)
+{
+    hasError = true;
+    errorMessage += "• Высота кружки (L) неверна.\n";
+}
+
+// Если ошибки обнаружены, показываем сообщение с красным крестом
+if (hasError)
+{
+    // Показать MessageBox с ошибками
+    MessageBox.Show(errorMessage, "Ошибки при вводе данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+else
+{
+    // Если все поля валидны, вызываем метод Build для создания объекта
+    this._builder.Build(this._parameters);
+    error_label.Visible = false; // Скрыть сообщение об ошибке
+}
+*/

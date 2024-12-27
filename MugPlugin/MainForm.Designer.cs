@@ -91,9 +91,9 @@
             this.limitL_label.AutoSize = true;
             this.limitL_label.Location = new System.Drawing.Point(496, 232);
             this.limitL_label.Name = "limitL_label";
-            this.limitL_label.Size = new System.Drawing.Size(102, 16);
+            this.limitL_label.Size = new System.Drawing.Size(113, 48);
             this.limitL_label.TabIndex = 17;
-            this.limitL_label.Text = "100 мм – 150 мм";
+            this.limitL_label.Text = "100 мм – 150 мм\r\nбольше чем\r\nдиаметр кружки";
             // 
             // limitR5_label
             // 

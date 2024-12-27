@@ -10,6 +10,7 @@ namespace MugPlugin
     /// </summary>
     public partial class MainForm : Form
     {
+        //TODO: RSDN
         /// <summary>
         /// Поле хранящее в себе ошибок.
         /// </summary>
@@ -98,6 +99,7 @@ namespace MugPlugin
             radiusR5_textBox.Text != null &&
                                        L_textBox.Text != null;
 
+            //TODO: redo
             if (diameterD1_textBox.BackColor == Color.Red)
             {
                 errorMessages.Add("Диаметр кружки должен быть между 100 мм - 150 мм");
@@ -142,6 +144,7 @@ namespace MugPlugin
 
         }
 
+         //TODO: duplication
         /// <summary>
         /// Обработчик события изменения текста в поле диаметра кружки (D1).
         /// Выполняет валидацию введенного значения и обновляет цвет фона.
@@ -309,6 +312,7 @@ namespace MugPlugin
             }
         }
 
+         //TODO: duplication
         /// <summary>
         /// Обработчик события покидания поля ввода для диаметра кружки (D1).
         /// Выполняет валидацию типа и значения параметра.
@@ -324,6 +328,7 @@ namespace MugPlugin
             }
         }
 
+         //TODO: duplication
         // <summary>
         /// Обработчик события покидания поля ввода для диаметра основания (D4).
         /// Выполняет валидацию типа и значения параметра.

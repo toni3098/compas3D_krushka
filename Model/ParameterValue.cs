@@ -64,6 +64,7 @@ namespace MugPlugin
             get => _maxValue;
             set
             {
+                //TODO: validation?
                 if (value < _minValue)
                 {
                     throw new ArgumentException("MaxValue не может быть меньше MinValue.");
@@ -80,6 +81,7 @@ namespace MugPlugin
             get => _minValue;
             set
             {
+                //TODO: validation?
                 if (value > _maxValue)
                 {
                     throw new ArgumentException("MinValue не может быть больше MaxValue.");

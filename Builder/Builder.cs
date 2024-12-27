@@ -147,6 +147,7 @@ namespace MugPlugin
             // Рисование линий для соединения дуг
             this._wrapper.CreateLine(handleLines, 0, handleLines.GetLength(0));
 
+            //this._wrapper.Spin();
             // Экструзия для придания объема ручке
             this._wrapper.Extrusion(3, handleThickness +1);
 

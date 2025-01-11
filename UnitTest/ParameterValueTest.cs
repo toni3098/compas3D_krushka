@@ -151,7 +151,8 @@ namespace UnitTestProject
         public void InteriorUpWidth_ValidDependency_ShouldPass()
         {
             var bodyWidth = new ParameterValue(100, 150, 120);
-            var interiorUpWidth = new ParameterValue(90, 135, 108); // 9/10 от 120
+            // 9/10 от 120
+            var interiorUpWidth = new ParameterValue(90, 135, 108); 
             Assert.AreEqual(108, interiorUpWidth.Value);
         }
 
@@ -162,7 +163,8 @@ namespace UnitTestProject
         public void InteriorBaseWidth_ValidDependency_ShouldPass()
         {
             var baseWidth = new ParameterValue(70, 100, 80);
-            var interiorBaseWidth = new ParameterValue(63, 90, 72); // 9/10 от 80
+            // 9/10 от 80
+            var interiorBaseWidth = new ParameterValue(63, 90, 72); 
             Assert.AreEqual(72, interiorBaseWidth.Value);
         }
 
@@ -173,7 +175,8 @@ namespace UnitTestProject
         public void BodyRadius2_ValidDependency_ShouldPass()
         {
             var bodyRadius1 = new ParameterValue(300, 350, 320);
-            var bodyRadius2 = new ParameterValue(187.5, 218.75, 200); // 5/8 от 320
+            // 5/8 от 320
+            var bodyRadius2 = new ParameterValue(187.5, 218.75, 200); 
             Assert.AreEqual(200, bodyRadius2.Value);
         }
 
@@ -184,7 +187,8 @@ namespace UnitTestProject
         public void HandleRadius4_ValidDependency_ShouldPass()
         {
             var handleRadius3 = new ParameterValue(10, 20, 15);
-            var handleRadius4 = new ParameterValue(30, 60, 45); // 3 * 15
+            // 3 * 15
+            var handleRadius4 = new ParameterValue(30, 60, 45); 
             Assert.AreEqual(45, handleRadius4.Value);
         }
 
@@ -195,7 +199,8 @@ namespace UnitTestProject
         public void HandleLength_ValidDependency_ShouldPass()
         {
             var bodyLength = new ParameterValue(100, 150, 120);
-            var handleLength = new ParameterValue(75, 112.5, 90); // 3/4 от 120
+            // 3/4 от 120
+            var handleLength = new ParameterValue(75, 112.5, 90); 
             Assert.AreEqual(90, handleLength.Value);
         }
     }

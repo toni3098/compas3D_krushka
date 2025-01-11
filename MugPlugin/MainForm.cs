@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace MugPlugin
 {
-    // <summary>
+    /// <summary>
     /// Класс MainForm, представляющий основную форму приложения.
     /// </summary>
     public partial class MainForm : Form
@@ -42,7 +42,18 @@ namespace MugPlugin
         private void MainForm_Load(object sender, EventArgs e)
         {
             this._parameters.AllParameters = new Dictionary<ParameterType, ParameterValue>();
-
+            if (_parameters.AllParameters.Count == 0)
+            {
+                _parameters.AllParameters[ParameterType.BodyWidth] = new ParameterValue(100, 150, 120);
+                _parameters.AllParameters[ParameterType.BaseWidth] = new ParameterValue(70, 100, 85);
+                _parameters.AllParameters[ParameterType.BodyRadius1] = new ParameterValue(300, 350, 320);
+                _parameters.AllParameters[ParameterType.HandleRadius3] = new ParameterValue(10, 20, 15);
+                _parameters.AllParameters[ParameterType.HandleRadius5] = new ParameterValue(75, 85, 80);
+                _parameters.AllParameters[ParameterType.BodyLength] = new ParameterValue(100, 150, 120);
+            }
+            
+            comboBox1.SelectedIndex = 2;
+            
         }
 
         /// <summary>
@@ -61,7 +72,7 @@ namespace MugPlugin
             }
         }
 
-        // <summary>
+        /// <summary>
         /// Скрывает ошибку и очищает список сообщений об ошибках.
         /// </summary>
         private void HideError()
@@ -99,35 +110,43 @@ namespace MugPlugin
             radiusR5_textBox.Text != null &&
                                        L_textBox.Text != null;
 
-            //TODO: redo
-            if (diameterD1_textBox.BackColor == Color.Red)
-            {
-                errorMessages.Add("Диаметр кружки должен быть между 100 мм - 150 мм");
-            }
+            // Получение диапазонов параметров из объекта _parameters
+            var diameterD1Range = _parameters.AllParameters[ParameterType.BodyWidth];
+            var diameterD4Range = _parameters.AllParameters[ParameterType.BaseWidth];
+            var radiusR1Range = _parameters.AllParameters[ParameterType.BodyRadius1];
+            var radiusR3Range = _parameters.AllParameters[ParameterType.HandleRadius3];
+            var radiusR5Range = _parameters.AllParameters[ParameterType.HandleRadius3];
+            var heightRange = _parameters.AllParameters[ParameterType.BodyLength];
 
-            if (diameterD4_textBox.BackColor == Color.Red)
-            {
-                errorMessages.Add("Диаметр основания кружки должен быть между 70 мм – 100 мм, и меньше чем диаметр кружки");
-            }
+            var textBoxToParameterMapping = new Dictionary<System.Windows.Forms.TextBox, (string ErrorMessage, ParameterValue Range)>
+{
+            { diameterD1_textBox, ($"Диаметр кружки должен быть между {{0}} мм - {{1}} мм", diameterD1Range) },
+            { diameterD4_textBox, ($"Диаметр основания кружки должен быть между {{0}} мм - {{1}} мм, и меньше чем диаметр кружки", diameterD4Range) },
+            { radiusR1_textBox, ($"Радиус кривизны до верха кружки должен быть между {{0}} мм - {{1}} мм", radiusR1Range) },
+            { radiusR3_textBox, ($"Радиус 1-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR3Range) },
+            { radiusR5_textBox, ($"Радиус 3-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR5Range) },
+            { L_textBox, ($"Высота кружки должна быть между {{0}} мм - {{1}} мм, и больше чем диаметр кружки", heightRange) }
+};
 
-            if (radiusR1_textBox.BackColor == Color.Red)
+            foreach (var entry in textBoxToParameterMapping)
             {
-                errorMessages.Add("Радиус кривизны до верха кружки должен быть между 300 мм – 350 мм");
-            }
+                var textBox = entry.Key;
+                var (errorMessageTemplate, range) = entry.Value;
 
-            if (radiusR3_textBox.BackColor == Color.Red)
-            {
-                errorMessages.Add("Радиус 1-й кривизны запястья кружки должен быть между 10 мм – 20 мм");
-            }
-
-            if (radiusR5_textBox.BackColor == Color.Red)
-            {
-                errorMessages.Add("Радиус 3-й кривизны запястья кружки должен быть между 75 мм – 85 мм");
-            }
-
-            if (L_textBox.BackColor == Color.Red)
-            {
-                errorMessages.Add("Высота кружки должна быть между 100 мм – 150 мм, и больше чем диаметр кружки");
+                if (textBox.BackColor == Color.Red)
+                {
+                    switch (textBox)
+                    {
+                        case var _ when textBox == diameterD1_textBox:
+                        case var _ when textBox == diameterD4_textBox:
+                        case var _ when textBox == radiusR1_textBox:
+                        case var _ when textBox == radiusR3_textBox:
+                        case var _ when textBox == radiusR5_textBox:
+                        case var _ when textBox == L_textBox:
+                            errorMessages.Add(string.Format(errorMessageTemplate, range.MinValue, range.MaxValue));
+                            break;
+                    }
+                }
             }
 
             if (errorMessages.Count > 0)
@@ -141,105 +160,41 @@ namespace MugPlugin
                 error_label.Visible = false;
                 return false;
             }
-
         }
 
          //TODO: duplication
-        /// <summary>
-        /// Обработчик события изменения текста в поле диаметра кружки (D1).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
         private void diameterD1_textBox_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(diameterD1_textBox.Text, out value) && value >= 100 && value <= 150;
-            diameterD1_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
-        /// <summary>
-        /// Обработчик события изменения текста в поле диаметра основания кружки (D4).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
         private void diameterD4_textBox_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(diameterD4_textBox.Text, out value) && value >= 70 && value <= 100 && value < int.Parse(diameterD1_textBox.Text);
-            diameterD4_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
-        /// <summary>
-        /// Обработчик события изменения текста в поле радиуса кривизны до верха кружки (R1).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
+
         private void radiusR1_textBox_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(radiusR1_textBox.Text, out value) && value >= 300 && value <= 350;
-            radiusR1_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
-        /// <summary>
-        /// Обработчик нажатия кнопки отмены.
-        /// Закрывает форму.
-        /// </summary>
+
         private void cancel_button_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        /// <summary>
-        /// Обработчик события изменения текста в поле радиуса кривизны ручки (R3).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
+
         private void radiusR3_textBox_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(radiusR3_textBox.Text, out value) && value >= 10 && value <= 20;
-            radiusR3_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
-        /// <summary>
-        /// Обработчик события изменения текста в поле радиуса кривизны ручки (R5).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
+        
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(radiusR5_textBox.Text, out value) && value >= 75 && value <= 85;
-            radiusR5_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
-        /// <summary>
-        /// Обработчик события изменения текста в поле высоты кружки (L).
-        /// Выполняет валидацию введенного значения и обновляет цвет фона.
-        /// </summary>
+
         private void L_textBox_TextChanged(object sender, EventArgs e)
         {
-            ClearErrors();
-            int value;
-            bool isValid = int.TryParse(L_textBox.Text, out value) &&
-                value >= 100 &&
-                value <= 150 &&
-                double.TryParse(diameterD1_textBox.Text, out double diameterD1) &&
-                diameterD1 < value;
-            L_textBox.BackColor = isValid ? Color.White : Color.Red;
-            CheckTextBox();
-            ShowErrors();
         }
 
         /// <summary>
@@ -308,7 +263,8 @@ namespace MugPlugin
             {
                 // Если все поля валидны, вызываем метод Build для создания объекта
                 this._builder.Build(this._parameters);
-                error_label.Visible = false; // Скрыть сообщение об ошибке
+                // Скрыть сообщение об ошибке
+                error_label.Visible = false; 
             }
         }
 
@@ -324,12 +280,11 @@ namespace MugPlugin
             if (this.diameterD1_textBox.BackColor != SystemColors.Window)
             {
                 this.ValidateValue(this.diameterD1_textBox, parameterType);
-
             }
         }
 
          //TODO: duplication
-        // <summary>
+        /// <summary>
         /// Обработчик события покидания поля ввода для диаметра основания (D4).
         /// Выполняет валидацию типа и значения параметра.
         /// </summary>
@@ -411,12 +366,12 @@ namespace MugPlugin
             try
             {
                 double.Parse(textBox.Text);
-                this.BackColor(parameterType, 3, 0, textBox.Text);
+                this.BackColor(parameterType, 3);
             }
             catch (Exception e)
             {
                 textBox.Text = string.Empty;
-                this.BackColor(parameterType, 1, 0, e.Message);
+                this.BackColor(parameterType, 1);
             }
         }
 
@@ -427,102 +382,121 @@ namespace MugPlugin
         /// <param name="whatColor">Устанавливаемый цвет.</param>
         /// <param name="whatReason">Причина установки цвета.</param>
         /// <param name="text">Текст устанавливаемый в подсказку.</param>
-        private void BackColor(ParameterType parameterType, int whatColor, int whatReason, string text)
+        private void BackColor(ParameterType parameterType, int whatColor)
         {
-            if (whatColor == 1) // Стандартное состояние (без ошибок)
+            // Стандартное состояние (без ошибок)
+            if (whatColor == 1) 
             {
-                if (parameterType == ParameterType.BodyWidth)  // Ширина тела
+                // Ширина тела
+                if (parameterType == ParameterType.BodyWidth)  
                 {
                     this.diameterD1_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.diameterD1_textBox, "Ширина тела от 100 до 150 мм");
                 }
-                else if (parameterType == ParameterType.BaseWidth)  // Ширина основания
+                // Ширина основания
+                else if (parameterType == ParameterType.BaseWidth)  
                 {
                     this.diameterD4_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.diameterD4_textBox, "Ширина основания от 70 до 100 мм");
                 }
-                else if (parameterType == ParameterType.BodyRadius1)  // Радиус тела 1
+                // Радиус тела 1
+                else if (parameterType == ParameterType.BodyRadius1)  
                 {
                     this.radiusR1_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.radiusR1_textBox, "Радиус тела 1 от 300 до 350 мм");
                 }
-                else if (parameterType == ParameterType.HandleRadius3)  // Радиус ручки 3
+                // Радиус ручки 3
+                else if (parameterType == ParameterType.HandleRadius3)  
                 {
                     this.radiusR3_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.radiusR3_textBox, "Радиус ручки 3 от 10 до 20 мм");
                 }
-                else if (parameterType == ParameterType.HandleRadius5)  // Радиус ручки 5
+                // Радиус ручки 5
+                else if (parameterType == ParameterType.HandleRadius5)  
                 {
                     this.radiusR5_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.radiusR5_textBox, "Радиус ручки 5 от 75 до 85 мм");
                 }
-                else if (parameterType == ParameterType.BodyLength)  // Длина тела
+                // Длина тела
+                else if (parameterType == ParameterType.BodyLength)  
                 {
                     this.L_textBox.BackColor = SystemColors.Window;
-                    this.toolTip1.SetToolTip(this.L_textBox, "Длина тела от 100 до 150 мм");
                 }
             }
-            else if (whatColor == 2) // Ошибка (красный цвет)
+            // Ошибка (красный цвет)
+            else if (whatColor == 2) 
             {
-                if (parameterType == ParameterType.BodyWidth)  // Ширина тела
+                // Ширина тела
+                if (parameterType == ParameterType.BodyWidth)  
                 {
                     this.diameterD1_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.diameterD1_textBox, whatReason == 1 ? "Ширина тела от 100 до 150 мм" : text);
                 }
-                else if (parameterType == ParameterType.BaseWidth)  // Ширина основания
+                // Ширина основания
+                else if (parameterType == ParameterType.BaseWidth)  
                 {
                     this.diameterD4_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.diameterD4_textBox, whatReason == 1 ? "Ширина основания от 70 до 100 мм" : text);
                 }
-                else if (parameterType == ParameterType.BodyRadius1)  // Радиус тела 1
+
+                // Радиус тела 1
+                else if (parameterType == ParameterType.BodyRadius1)  
                 {
                     this.radiusR1_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.radiusR1_textBox, whatReason == 1 ? "Радиус тела от 300 до 350 мм" : text);
                 }
-                else if (parameterType == ParameterType.HandleRadius3)  // Радиус ручки 3
+
+                // Радиус ручки 3
+                else if (parameterType == ParameterType.HandleRadius3)  
                 {
                     this.radiusR3_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.radiusR3_textBox, whatReason == 1 ? "Радиус ручки от 10 до 20 мм" : text);
                 }
-                else if (parameterType == ParameterType.HandleRadius5)  // Радиус ручки 5
+
+                // Радиус ручки 5
+                else if (parameterType == ParameterType.HandleRadius5)  
                 {
                     this.radiusR5_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.radiusR5_textBox, whatReason == 1 ? "Радиус ручки от 75 до 85 мм" : text);
                 }
-                else if (parameterType == ParameterType.BodyLength)  // Длина тела
+
+                // Длина тела
+                else if (parameterType == ParameterType.BodyLength)  
                 {
                     this.L_textBox.BackColor = Color.Red;
-                    this.toolTip1.SetToolTip(this.L_textBox, whatReason == 1 ? "Длина тела от 100 до 150 мм" : text);
                 }
             }
-            else if (whatColor == 3) // Успешно (зеленый цвет)
+
+            // Успешно (зеленый цвет)
+            else if (whatColor == 3) 
             {
-                if (parameterType == ParameterType.BodyWidth)  // Ширина тела
+                // Ширина тела
+                if (parameterType == ParameterType.BodyWidth)  
                 {
                     this.diameterD1_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.diameterD1_textBox, null);
                 }
-                else if (parameterType == ParameterType.BaseWidth)  // Ширина основания
+            
+                // Ширина основания
+                else if (parameterType == ParameterType.BaseWidth)  
                 {
                     this.diameterD4_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.diameterD4_textBox, null);
                 }
-                else if (parameterType == ParameterType.BodyRadius1)  // Радиус тела 1
+                
+                // Радиус тела 1
+                else if (parameterType == ParameterType.BodyRadius1)  
                 {
                     this.radiusR1_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.radiusR1_textBox, null);
                 }
-                else if (parameterType == ParameterType.HandleRadius3)  // Радиус ручки 3
+                
+                // Радиус ручки 3
+                else if (parameterType == ParameterType.HandleRadius3)  
                 {
                     this.radiusR3_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.radiusR3_textBox, null);
                 }
-                else if (parameterType == ParameterType.HandleRadius5)  // Радиус ручки 5
+                
+                // Радиус ручки 5
+                else if (parameterType == ParameterType.HandleRadius5)  
                 {
                     this.radiusR5_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.radiusR5_textBox, null);
                 }
-                else if (parameterType == ParameterType.BodyLength)  // Длина тела
+                
+                // Длина тела
+                else if (parameterType == ParameterType.BodyLength)  
                 {
                     this.L_textBox.BackColor = Color.Green;
                     this.toolTip1.SetToolTip(this.L_textBox, null);
@@ -540,111 +514,131 @@ namespace MugPlugin
 
         private void ValidateValue(System.Windows.Forms.TextBox textBox, ParameterType parameterType)
         {
-            bool cached = false;
-            ParameterValue parameter = new ParameterValue();
+            ClearErrors();
 
-            // Инициализация объекта ParameterValue для новых параметров
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                // Если текстбокс пустой
+                // Установить цвет как Window
+                BackColor(parameterType, 1); 
+                return;
+            }
+
+            bool isValid = true;
+            double value;
+
+            // Попытка преобразовать текст в число
+            if (!double.TryParse(textBox.Text, out value))
+            {
+                isValid = false;
+            }
+
+            double D1 = 0;
+            if (!double.TryParse(this.diameterD1_textBox.Text, out D1) && parameterType != ParameterType.BodyWidth)
+            {
+                // Установить красный цвет
+                BackColor(parameterType, 2); 
+                return;
+            }
+
+            // Проверка значений в зависимости от типа параметра
             switch (parameterType)
             {
                 case ParameterType.BodyWidth:
-                    parameter.MaxValue = 150;
-                    parameter.MinValue = 100;
+                    isValid = value >= 100 && value <= 150;
                     break;
 
                 case ParameterType.BaseWidth:
-                    parameter.MaxValue = 100;
-                    parameter.MinValue = 70;
+                    isValid = value >= 70 && value <= 100 && value < D1;
                     break;
 
                 case ParameterType.BodyRadius1:
-                    parameter.MaxValue = 350;
-                    parameter.MinValue = 300;
+                    isValid = value >= 300 && value <= 350;
                     break;
 
                 case ParameterType.HandleRadius3:
-                    parameter.MaxValue = 20;
-                    parameter.MinValue = 10;
+                    isValid = value >= 10 && value <= 20;
                     break;
 
                 case ParameterType.HandleRadius5:
-                    parameter.MaxValue = 85;
-                    parameter.MinValue = 75;
+                    isValid = value >= 75 && value <= 85;
                     break;
 
                 case ParameterType.BodyLength:
-                    parameter.MaxValue = 150;
-                    parameter.MinValue = 100;
+                    isValid = value >= 100 && value <= 150 && value > D1;
                     break;
 
                 default:
                     throw new ArgumentException("Неизвестный тип параметра.");
             }
 
-            try
+            // Установка цвета в зависимости от результата проверки
+            if (isValid)
             {
-                // Попытка преобразовать текст в число
-                parameter.Value = int.Parse(textBox.Text);
-            }
-            catch (Exception e)
-            {
-                this.BackColor(parameterType, 2, 1, e.Message);
-                cached = true; // Установка флага кэширования в true при ошибке
-            }
+                // Установить зеленый цвет
+                BackColor(parameterType, 3); 
 
-            if (!cached)
-            {
-                double D1; // Объявление переменной для D1
-
-                // Получение значения D1 из diameterD1_textbox
+                // Аффектация значения параметру
                 try
                 {
-                    D1 = double.Parse(this.diameterD1_textBox.Text); // Преобразование текста в число
+                    // Передача значения параметра
+                    _parameters.SetParameter(parameterType, value); 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    this.BackColor(parameterType, 2, 1, "Ошибка при чтении D1: " + e.Message);
-                    return; // Выход из метода при ошибке
-                }
+                    // Логгирование ошибки при аффектации параметра
+                    Console.WriteLine($"Ошибка при установке параметра: {ex.Message}");
 
-                // Проверка BaseWidth и BodyLength относительно D1
-                if (parameterType == ParameterType.BaseWidth && parameter.Value >= D1)
-                {
-                    this.BackColor(parameterType, 2, 1, "BaseWidth должно быть меньше D1.");
-                    cached = true; // Установка флага кэширования в true при ошибке
-                }
-                else if (parameterType == ParameterType.BodyLength && parameter.Value <= D1)
-                {
-                    this.BackColor(parameterType, 2, 1, "BodyLength должно быть больше D1.");
-                    cached = true; // Установка флага кэширования в true при ошибке
-                }
-
-                if (!cached)
-                {
-                    // Проверка на диапазон значений
-                    if (parameter.Value < parameter.MinValue || parameter.Value > parameter.MaxValue)
-                    {
-                        this.BackColor(parameterType, 2, 1, $"Значение должно быть между {parameter.MinValue} и {parameter.MaxValue}.");
-                        cached = true; // Установка флага кэширования в true при ошибке
-                    }
-                }
-
-                if (!cached)
-                {
-                    try
-                    {
-                        // Передача значения параметра вместо объекта
-                        this._parameters.SetParameter(parameterType, parameter.Value, parameter.MinValue, parameter.MaxValue);
-                        this.BackColor(parameterType, 3, 0, string.Empty);
-                    }
-                    catch (Exception e)
-                    {
-                        this.BackColor(parameterType, 2, 0, e.Message);
-                    }
+                    // Установить красный цвет в случае ошибки
+                    BackColor(parameterType, 2); 
                 }
             }
+            else
+            {
+                // Установить красный цвет
+                BackColor(parameterType, 2);
+            }
+            CheckTextBox();
+        }
+
+        private void radiusR1_label_Click(object sender, EventArgs e)
+        {
+
         }
 
 
+        /// <summary>
+        /// Сигналы для построения подставки и подподставки.
+        /// </summary>
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == -1 || comboBox1.SelectedIndex == 2)
+            {
+                Flags.flag = -1;
+                return;
+            }
 
+            Flags.flag = comboBox1.SelectedIndex;
+            MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
+            //Flags.flag = comboBox1.SelectedIndex;
+            //MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
+        }
+
+
+        /// <summary>
+        /// Сигналы для построения крышки.
+        /// </summary>
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                Flags.krishka = true;
+                MessageBox.Show($"Будет построенно: {checkBox1.Text}.");
+            }
+            else
+            {
+                Flags.krishka = false;
+            }
+        }
     }
 }

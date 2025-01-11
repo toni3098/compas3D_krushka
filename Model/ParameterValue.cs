@@ -30,30 +30,11 @@ namespace MugPlugin
         /// <param name="value">Текущее значение параметра.</param>
         public ParameterValue(double minValue, double maxValue, double value)
         {
-            if (minValue > maxValue)
-            {
-                throw new ArgumentException("MinValue не может быть больше MaxValue.");
-            }
+            Validate(minValue, maxValue, value);
 
             _minValue = minValue;
             _maxValue = maxValue;
-
-            if (!Validate(value))  // Utilisation de Validate ici
-            {
-                throw new ArgumentException("Значение выходит за допустимые пределы.");
-            }
-
             _value = value;
-        }
-
-        /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="ParameterValue"/> с диапазоном значений по умолчанию.
-        /// </summary>
-        public ParameterValue()
-        {
-            MinValue = 0;
-            MaxValue = double.MaxValue;
-            Value = 0;
         }
 
         /// <summary>
@@ -65,10 +46,7 @@ namespace MugPlugin
             set
             {
                 //TODO: validation?
-                if (value < _minValue)
-                {
-                    throw new ArgumentException("MaxValue не может быть меньше MinValue.");
-                }
+                Validate(_minValue, value, _value);
                 _maxValue = value;
             }
         }
@@ -82,10 +60,7 @@ namespace MugPlugin
             set
             {
                 //TODO: validation?
-                if (value > _maxValue)
-                {
-                    throw new ArgumentException("MinValue не может быть больше MaxValue.");
-                }
+                Validate(value, _maxValue, _value);
                 _minValue = value;
             }
         }
@@ -98,22 +73,28 @@ namespace MugPlugin
             get => _value;
             set
             {
-                if (!Validate(value))  // Validation via the Validate method
-                {
-                    throw new ArgumentException("Значение выходит за допустимые пределы.");
-                }
+                Validate(_minValue, _maxValue, value);
                 _value = value;
             }
         }
 
         /// <summary>
-        /// Функция для валидации значения.
+        /// Общая функция для валидации диапазона и значения.
         /// </summary>
+        /// <param name="min">Минимальное значение.</param>
+        /// <param name="max">Максимальное значение.</param>
         /// <param name="value">Значение для проверки.</param>
-        /// <returns>Возвращает true, если значение в допустимом диапазоне, иначе false.</returns>
-        public bool Validate(double value)
+        private void Validate(double min, double max, double value)
         {
-            return value >= _minValue && value <= _maxValue;
+            if (min > max)
+            {
+                throw new ArgumentException("MinValue не может быть больше MaxValue.");
+            }
+
+            if (value < min || value > max)
+            {
+                throw new ArgumentException("Значение выходит за допустимые пределы.");
+            }
         }
     }
 }

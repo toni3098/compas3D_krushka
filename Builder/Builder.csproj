@@ -83,6 +83,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Flags\Flags.csproj">
+      <Project>{843733f7-26bd-4252-8b5b-f2def8181cdb}</Project>
+      <Name>Flags</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kompas\Kompas.csproj">
       <Project>{cc98f9ad-5d66-4da3-b168-0ddc1737b150}</Project>
       <Name>Kompas</Name>

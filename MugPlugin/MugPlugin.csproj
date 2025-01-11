@@ -84,6 +84,10 @@
       <Project>{e9195c2c-173e-469a-88ca-2d6d3cccefd5}</Project>
       <Name>Builder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Flags\Flags.csproj">
+      <Project>{843733f7-26bd-4252-8b5b-f2def8181cdb}</Project>
+      <Name>Flags</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{3dac9677-9649-4181-8aaf-71e3d4440b3c}</Project>
       <Name>Model</Name>

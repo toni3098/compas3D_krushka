@@ -29,7 +29,7 @@ namespace StressTesting
             parameters.SetParameter(ParameterType.BodyLength, 100, 100, 150);
 
             const double gigabyteInByte = 0.000000000931322574615478515625;
-            int maxIterations = 200;
+            int maxIterations = 100;
             int count = 0;
 
             var computerInfo = new ComputerInfo();

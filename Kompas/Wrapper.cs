@@ -98,7 +98,6 @@ namespace Kompas
                         pointsArray[i, 3],
                         (int)pointsArray[i, 4]);
                 }
-
                 sketchDef.EndEdit();
             }
         }
@@ -114,7 +113,7 @@ namespace Kompas
         /// <param name="y3">y координата конечной точки.</param>
         public void CreateArc(double[,] pointsArray, int start, int count)
         {
-            // Ensure the array has the correct structure
+            // Убедить, что массив имеет правильную структуру.
             if (pointsArray.GetLength(1) != 6)
             {
                 throw new ArgumentException("The pointsArray must have exactly 6 columns: {x1, y1, x2, y2, x3, y3}");
@@ -135,13 +134,20 @@ namespace Kompas
 
                     // Draw the arc
                     document2D.ksArcBy3Points(
-                        pointsArray[i, 0], // x1
-                        pointsArray[i, 1], // y1
-                        pointsArray[i, 2], // x2
-                        pointsArray[i, 3], // y2
-                        pointsArray[i, 4], // x3
-                        pointsArray[i, 5], // y3
-                        1); // Direction of the arc
+                        // x1
+                        pointsArray[i, 0],
+                        // y1
+                        pointsArray[i, 1],
+                        // x2
+                        pointsArray[i, 2],
+                        // y2
+                        pointsArray[i, 3],
+                        // x3
+                        pointsArray[i, 4],
+                        // y3
+                        pointsArray[i, 5],
+                        // Direction of the arc
+                        1); 
                 }
 
                 sketchDef.EndEdit();
@@ -165,8 +171,12 @@ namespace Kompas
                 {
                     rotateDef.directionType = (short)Direction_Type.dtNormal;
                     rotateDef.SetSideParam(false, 360);
-                    rotateDef.SetSketch(this._sketchEntity);  // эскиз операции вращения
-                    entityRotate.Create();              // создать операцию
+
+                    // эскиз операции вращения
+                    rotateDef.SetSketch(this._sketchEntity);  
+
+                    // создать операцию
+                    entityRotate.Create();              
                 }
             }
         }
@@ -203,7 +213,8 @@ namespace Kompas
                             cutExtrusionDef.SetThinParam(false, 0, 0, 0);
                         }
 
-                        entityCutExtrusion.Create(); // создадим операцию вырезание выдавливанием
+                        // создадим операцию вырезание выдавливанием
+                        entityCutExtrusion.Create(); 
                     }
                 }
             }
@@ -220,14 +231,20 @@ namespace Kompas
                     {
                         extrusionDef.directionType = (short)Direction_Type.dtNormal;
                         extrusionDef.SetSideParam(
-                            true, // прямое направление
-                            (short)End_Type.etBlind,    // строго на глубину
+                            // прямое направление
+                            true, 
+                                  // строго на глубину
+                            (short)End_Type.etBlind,    
                             length,
                             0,
                             false);
                         extrusionDef.SetThinParam(true, (short)Direction_Type.dtBoth, 0.25, 0.25);
-                        extrusionDef.SetSketch(this._sketchEntity);   // эскиз операции выдавливания
-                        entityExtrusion.Create();                    // создать операцию
+
+                        // эскиз операции выдавливания
+                        extrusionDef.SetSketch(this._sketchEntity);   
+
+                        // создать операцию
+                        entityExtrusion.Create();                    
                     }
                 }
             }
@@ -260,7 +277,9 @@ namespace Kompas
                     }
                 }
             }
-            else if (parameter == 4) // 360-degree cut
+
+            // 360-degree cut
+            else if (parameter == 4) 
             {
                 ksEntity entityCutRotate = (ksEntity)this._part.NewEntity((short)Obj3dType.o3d_cutRotated);
                 if (entityCutRotate != null)
@@ -269,9 +288,14 @@ namespace Kompas
                     if (cutRotateDef != null)
                     {
                         cutRotateDef.directionType = (short)Direction_Type.dtNormal;
-                        cutRotateDef.SetSideParam(false, 360); // Set full rotation
-                        cutRotateDef.SetSketch(this._sketchEntity); // Link the sketch for rotation
-                        entityCutRotate.Create(); // Create the cut operation
+                        // Set full rotation
+                        cutRotateDef.SetSideParam(false, 360);
+
+                        // Link the sketch for rotation
+                        cutRotateDef.SetSketch(this._sketchEntity);
+
+                        // Create the cut operation
+                        entityCutRotate.Create(); 
                     }
                 }
             }

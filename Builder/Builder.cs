@@ -28,9 +28,29 @@ namespace MugPlugin
             // Построение тела чашки
             BuildBody(parameters);
 
+
             BuildInterior(parameters);
+
             // Построение ручки
             BuildHandle(parameters);
+
+            //  Построение крышки
+            if (Flags.krishka == true)
+            {
+                BuildKrishka(parameters);
+            }
+
+            // Построение подставки и подподставки
+            if (Flags.flag == 0)
+            {
+                BuildTarelka(parameters);
+            }
+            else if (Flags.flag == 1)
+            {
+                BuildTarelka(parameters);
+                BuildPodTarelka(parameters);
+            }
+            
         }
 
         /// <summary>
@@ -39,33 +59,70 @@ namespace MugPlugin
         private void BuildBody(Parameters parameters)
         {
             // Получаем параметры
-            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value; //D1
-            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value; //D4
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value; //D2
-            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value; // L
+
+            //D1
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+
+            //D4
+            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
+
+            //D2
+            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+
+            // L
+            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value;
 
             // Определяем точки для тела кружки
-            double halfBodyWidth = bodyWidth / 2; // D1/2
-            double halfBaseWidth = baseWidth / 2; // D4 / 2
-            double halfBodyLenght = halfBodyWidth / 2; // L/2
-            double halfInteriorUpWidth = interiorUpWidth / 2; // D2/2
-            double epaisseur = halfBodyWidth - halfInteriorUpWidth; // Толщина
+
+            // D1/2
+            double halfBodyWidth = bodyWidth / 2;
+
+            // D4 / 2
+            double halfBaseWidth = baseWidth / 2;
+
+            // L/2
+            double halfBodyLenght = halfBodyWidth / 2;
+
+            // D2/2
+            double halfInteriorUpWidth = interiorUpWidth / 2;
+
+            // Толщина
+            double epaisseur = halfBodyWidth - halfInteriorUpWidth; 
 
             double[,] pointsArray = {
-                { 0, 0, -halfBaseWidth, 0, 1 }, // база 1-2
-                { 0, -bodyLength, -halfBodyWidth, -bodyLength, 1 }, // верх 4-5
-                { 0, -bodyLength, 0, 0, 3 }, // высота 5-1
+                { 
+                    0, 0, 
+                    -halfBaseWidth, 0, 
+                    1 
+                },
+
+                { 
+                    0, -bodyLength, 
+                    -halfBodyWidth, -bodyLength, 
+                    1 
+                },
+
+                { 
+                    0, -bodyLength, 
+                    0, 0, 
+                    3 
+                },
             };
 
             double[,] pointsArcArray = {
-                {-halfBaseWidth, 0, -halfBodyWidth+2, -halfBodyLenght, -halfBodyWidth, -bodyLength} // 2-4
+                {
+                    -halfBaseWidth, 0, 
+                    -halfBodyWidth+2, -halfBodyLenght, 
+                    -halfBodyWidth, -bodyLength
+                }
             };
 
-            _wrapper.CreateSketch(2); // Создание эскиза на плоскости
+            // Создание эскиза на плоскости
+            _wrapper.CreateSketch(2); 
             _wrapper.CreateArc(pointsArcArray, 0, pointsArcArray.GetLength(0));
-            _wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0)); // Рисуем стороны
+            _wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0)); 
             _wrapper.Spin();
-            _wrapper.Extrusion(3, 1); // Выдавливание эскиза на глубину 10 мм
+            _wrapper.Extrusion(3, 1);
         }
 
         /// <summary>
@@ -73,34 +130,52 @@ namespace MugPlugin
         /// </summary>
         private void BuildInterior(Parameters parameters)
         {
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value; //D2
-            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value; //D3
-            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value; //D1
-            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value; // L
+            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value;
 
-            double halfInteriorUpWidth = interiorUpWidth / 2; // D2/2
-            double halfInteriorBaseWidth = interiorBaseWidth / 2; // D4 / 2
-            double halfBodyWidth = bodyWidth / 2; // D1/2
+            double halfInteriorUpWidth = interiorUpWidth / 2;
+            double halfInteriorBaseWidth = interiorBaseWidth / 2;
+            double halfBodyWidth = bodyWidth / 2;
             double lenghtInterior = bodyLength - (halfBodyWidth - halfInteriorBaseWidth);
-            double epaisseur = 2 + (halfBodyWidth - halfInteriorUpWidth); // Толщина
-            double halfBodyLenght = halfBodyWidth / 2; // L/2
+            double epaisseur = 2 + (halfBodyWidth - halfInteriorUpWidth);
+            double halfBodyLenght = halfBodyWidth / 2;
 
             double[,] pointsArray = {
-                { 0, -epaisseur, -halfInteriorBaseWidth, -epaisseur, 1 }, // внутреннее основание 6-7
-                { -(halfBodyWidth - epaisseur),-bodyLength, 0, -bodyLength, 1 }, // верх внутренний 8-5
-                { 0, -bodyLength, 0, -epaisseur, 3 }, // высота 5-6
+                { 
+                    0, -epaisseur, 
+                    -halfInteriorBaseWidth, -epaisseur, 
+                    1 
+                },
+
+                { 
+                    -(halfBodyWidth - epaisseur),-bodyLength, 
+                    0, -bodyLength, 
+                    1 
+                },
+
+                { 
+                    0, -bodyLength, 
+                    0, -epaisseur, 
+                    3 
+                },
             };
 
             double[,] pointsArcArray = {
                 //TODO: RSDN
-                {-halfInteriorBaseWidth, -epaisseur, -(halfBodyWidth - epaisseur - 3)+2, -(halfBodyLenght-epaisseur), -(halfBodyWidth - epaisseur), -bodyLength} // 7-8
+                {
+                    -halfInteriorBaseWidth, -epaisseur, 
+                    -(halfBodyWidth - epaisseur - 3) + 2, -(halfBodyLenght-epaisseur), 
+                    -(halfBodyWidth - epaisseur), -bodyLength
+                }
             };
 
             this._wrapper.CreateSketch(2);
             this._wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0));
             this._wrapper.CreateArc(pointsArcArray, 0, pointsArcArray.GetLength(0));
             this._wrapper.Spin();
-            this._wrapper.Extrusion(4, 0); // Экструзия по длине тела
+            this._wrapper.Extrusion(4, 0);
         }
 
         /// <summary>
@@ -112,40 +187,60 @@ namespace MugPlugin
             this._wrapper.CreateSketch(2);
 
             // Извлечение параметров
-            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value; // D1
-            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value; // D4
-            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value; // L
+
+            // D1
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+
+            // D4
+            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
+
+            // L
+            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value; 
 
             // Расчёт размеров и позиций ручки
-            double halfBodyWidth = bodyWidth / 2; // Половина ширины тела
-            double handleHeight = bodyLength * 1.2; // Высота ручки (очень длинная) (120 % от высоты тела)
-            double handleWidth = bodyWidth * 0.7; // Ширина ручки (70 % от ширины тела)
-            double handleThickness = bodyWidth * 0.08; // Толщина ручки
-            double handleOffset = bodyLength / 3.2; // Вертикальный сдвиг, чтобы опустить ручку еще ниже
+
+            // Половина ширины тела
+            double halfBodyWidth = bodyWidth / 2;
+
+            // Высота ручки (очень длинная) (120 % от высоты тела)
+            double handleHeight = bodyLength * 1.2;
+
+            // Ширина ручки (70 % от ширины тела)
+            double handleWidth = bodyWidth * 0.7;
+
+            // Толщина ручки
+            double handleThickness = bodyWidth * 0.08;
+
+            // Вертикальный сдвиг, чтобы опустить ручку еще ниже
+            double handleOffset = bodyLength / 3.2;
 
             // Определение точек для большой кривой ручки
-            double[,] handleArcArray = {
-                { -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4), // Точка начала (подключена к телу, еще ниже) // внизу
-                  -halfBodyWidth - handleWidth / 2, -(handleHeight / 2 - handleOffset), // Вершина кривой (большая кривизна)
-                  -halfBodyWidth, -(handleHeight - handleOffset) }, // Точка конца (подключена к телу, еще ниже)
+            double[,] handleArcArray = 
+            {
+                { -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
+                  -halfBodyWidth - handleWidth / 2, -(handleHeight / 2 - handleOffset),
+                  -halfBodyWidth, -(handleHeight - handleOffset) 
+                },
                 
-                { -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1), // Внутренняя точка начала
-                  -halfBodyWidth - handleWidth / 2 + handleThickness, -(handleHeight / 2 - handleOffset+2), // Вершина внутренняя
-                  -halfBodyWidth, -(handleHeight - handleOffset - handleThickness) } // Точка конца внутренняя
+                { -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1),
+                  -halfBodyWidth - handleWidth / 2 + handleThickness, -(handleHeight / 2 - handleOffset+2),
+                  -halfBodyWidth, -(handleHeight - handleOffset - handleThickness) 
+                }
             };
 
             // Определение линий для замыкания ручки
             double[,] handleLines = 
-                {
-                    { 
-                        -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
-                        -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1), 1 
-                    }, // Подключение внизу
-                    { 
-                        -halfBodyWidth, -(handleHeight - handleOffset),
-                        -halfBodyWidth, -(handleHeight - handleOffset - handleThickness), 1
-                    } // Подключение сверху
-                };
+            {
+                { 
+                    -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
+                    -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1), 1 
+                },
+
+                { 
+                    -halfBodyWidth, -(handleHeight - handleOffset),
+                    -halfBodyWidth, -(handleHeight - handleOffset - handleThickness), 1
+                }
+            };
 
             // Рисование дуг
             this._wrapper.CreateArc(handleArcArray, 0, handleArcArray.GetLength(0));
@@ -153,11 +248,255 @@ namespace MugPlugin
             // Рисование линий для соединения дуг
             this._wrapper.CreateLine(handleLines, 0, handleLines.GetLength(0));
 
-            //this._wrapper.Spin();
             // Экструзия для придания объема ручке
             this._wrapper.Extrusion(3, handleThickness +1);
 
             Console.WriteLine("Ручка с большой кривизной успешно создана.");
+        }
+
+        /// <summary>
+        /// Построение ручки кружки.
+        /// </summary>
+        private void BuildKrishka(Parameters parameters)
+        {
+            // Получаем параметры
+            //D1
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+            //D2
+            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            // L
+            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value;
+
+            // D1/2
+            double halfBodyWidth = bodyWidth / 2;
+
+            // D2/2
+            double halfInteriorUpWidth = interiorUpWidth / 2;
+
+            // Толщина
+            double epaisseur = halfBodyWidth - halfInteriorUpWidth; 
+
+            double[,] pointsArray = {
+                { 
+                    0, -bodyLength, 
+                    -halfBodyWidth, -bodyLength, 
+                    1 },
+
+                { 
+                    -halfInteriorUpWidth, -bodyLength-epaisseur, 
+                    -epaisseur, -bodyLength-epaisseur, 
+                    1 
+                },
+
+                {
+                    0, -bodyLength-(2*epaisseur), 
+                    -2*epaisseur, -bodyLength-(2*epaisseur), 
+                    1
+                },
+
+                { 
+                    0, -bodyLength, 
+                    0, -bodyLength-(2*epaisseur), 
+                    3
+                },
+
+                {
+                    -epaisseur, -bodyLength-epaisseur, 
+                    -epaisseur, -bodyLength-epaisseur-(epaisseur/2), 
+                    1
+                },
+
+                {
+                    -epaisseur, -bodyLength-epaisseur-(epaisseur/2), 
+                    -2*epaisseur, -bodyLength-epaisseur-(epaisseur/2), 
+                    1
+                },
+
+                {
+                    -2*epaisseur, -bodyLength-epaisseur-(epaisseur/2), 
+                    -2*epaisseur, -bodyLength-(2*epaisseur), 
+                    1
+                },
+            };
+            
+            double[,] pointsArcArray = {
+                {-halfBodyWidth, -bodyLength, 
+                    -halfBodyWidth, -bodyLength-(epaisseur/4),
+                    -halfInteriorUpWidth, -bodyLength-epaisseur},
+            };
+
+            // Создание эскиза на плоскости
+            _wrapper.CreateSketch(2); 
+
+            _wrapper.CreateArc(pointsArcArray, 0, pointsArcArray.GetLength(0));
+
+            // Рисуем стороны
+            _wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0)); 
+
+            _wrapper.Spin();
+
+            // Выдавливание эскиза на глубину 10 мм
+            _wrapper.Extrusion(3, 1); 
+
+        }
+
+        /// <summary>
+        /// Построение тарелки кружки.
+        /// </summary>
+        private void BuildTarelka(Parameters parameters)
+        {
+            // Получаем параметры
+
+            //D1
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+
+            //D4
+            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
+
+            //D2
+            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+
+            //D3
+            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+
+
+            // D1/2
+            double halfBodyWidth = bodyWidth / 2;
+
+            // D4 / 2
+            double halfBaseWidth = baseWidth / 2;
+
+            // D2/2
+            double halfInteriorUpWidth = interiorUpWidth / 2;
+
+            // Толщина
+            double epaisseur = halfBodyWidth - halfInteriorUpWidth;
+
+            // D3/2
+            double halfInteriorBase = interiorBaseWidth / 2; 
+
+            double[,] pointsArray = {
+                { 
+                    0, 0, 
+                    -halfBaseWidth, 0, 
+                    1 
+                },
+
+                { 
+                    0, 0, 
+                    0, epaisseur, 
+                    3 
+                },
+
+                { 
+                    0, epaisseur, 
+                    -halfInteriorBase, epaisseur, 
+                    1 
+                },
+
+                { 
+                    -halfInteriorBase-(epaisseur/2), epaisseur,
+                    -halfBaseWidth-epaisseur, epaisseur, 
+                    1
+                },
+
+                { 
+                    -halfBaseWidth-epaisseur, 0, 
+                    -halfBodyWidth, 0, 
+                    1
+                },
+            };
+            
+            double[,] pointsArcArray = {
+                {
+                    -halfBaseWidth, 0, 
+                    -halfBaseWidth-(epaisseur/2), -epaisseur/4,
+                    -halfBaseWidth-epaisseur, 0
+                },
+
+                {
+                    -halfBaseWidth-epaisseur, epaisseur, 
+                    -halfBaseWidth-epaisseur-(epaisseur/2), 1+epaisseur/2,
+                    -halfBodyWidth, 0
+                },
+
+                {
+                    -halfInteriorBase, epaisseur,
+                    -halfInteriorBase-(epaisseur/4), epaisseur+1,
+                    -halfInteriorBase-(epaisseur/2), epaisseur
+                },
+            };
+            
+            _wrapper.CreateSketch(2);
+            _wrapper.CreateArc(pointsArcArray, 0, pointsArcArray.GetLength(0));
+            _wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0));
+            _wrapper.Spin();
+            _wrapper.Extrusion(3, 1);
+
+        }
+
+        /// <summary>
+        /// Построение обьекта под тарелкой.
+        /// </summary>
+        private void BuildPodTarelka(Parameters parameters)
+        {
+            // Получаем параметры
+            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
+            double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
+            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+
+            double halfBodyWidth = bodyWidth / 2;
+            double halfBaseWidth = baseWidth / 2;
+            double halfInteriorUpWidth = interiorUpWidth / 2;
+            double epaisseur = halfBodyWidth - halfInteriorUpWidth;
+            double halfInteriorBase = interiorBaseWidth / 2;
+
+            double[,] pointsArray = {
+                { 
+                    0, epaisseur, 
+                    -halfInteriorBase, epaisseur, 
+                    1 
+                },
+
+                { 
+                    -halfInteriorBase-(epaisseur/2), epaisseur,
+                    -halfBaseWidth-2*epaisseur, epaisseur, 
+                    1
+                },
+
+                {
+                    -halfBaseWidth-2*epaisseur, epaisseur, 
+                    -halfBaseWidth-2*epaisseur, 3*epaisseur, 
+                    1
+                },
+
+                {
+                    -halfBaseWidth-2*epaisseur, 3*epaisseur, 
+                    0, 3*epaisseur, 
+                    1
+                },
+
+                { 
+                    0, epaisseur, 
+                    0, 3*epaisseur, 
+                    3
+                },
+            };
+
+            double[,] pointsArcArray = {
+                {
+                    -halfInteriorBase, epaisseur, 
+                    -halfInteriorBase-(epaisseur/4), epaisseur+1,
+                    -halfInteriorBase-(epaisseur/2), epaisseur
+                }
+            };
+
+            _wrapper.CreateSketch(2);
+            _wrapper.CreateArc(pointsArcArray, 0, pointsArcArray.GetLength(0));
+            _wrapper.CreateLine(pointsArray, 0, pointsArray.GetLength(0));
+            _wrapper.Spin();
+            _wrapper.Extrusion(3, 1);
         }
 
         /// <summary>

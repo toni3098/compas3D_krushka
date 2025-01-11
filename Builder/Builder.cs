@@ -217,12 +217,14 @@ namespace MugPlugin
             // Определение точек для большой кривой ручки
             double[,] handleArcArray = 
             {
-                { -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
+                { 
+                  -halfBodyWidth + 4 , -(bodyLength / 2 - handleOffset + 4),
                   -halfBodyWidth - handleWidth / 2, -(handleHeight / 2 - handleOffset),
                   -halfBodyWidth, -(handleHeight - handleOffset) 
                 },
                 
-                { -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1),
+                { 
+                  -halfBodyWidth+1, -(bodyLength / 2 - handleOffset + handleThickness+1),
                   -halfBodyWidth - handleWidth / 2 + handleThickness, -(handleHeight / 2 - handleOffset+2),
                   -halfBodyWidth, -(handleHeight - handleOffset - handleThickness) 
                 }

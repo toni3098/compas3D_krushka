@@ -142,7 +142,7 @@ namespace UnitTestProject
             new ParameterValue(100, 150, 90);
         }
 
-        // Тесты зависимостей
+        /// Тесты зависимостей
 
         /// <summary>
         /// Проверка зависимости ширины внутренней верхней части корпуса (InteriorUpWidth).

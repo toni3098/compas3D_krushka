@@ -620,8 +620,6 @@ namespace MugPlugin
 
             Flags.flag = comboBox1.SelectedIndex;
             MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
-            //Flags.flag = comboBox1.SelectedIndex;
-            //MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
         }
 
 

@@ -47,21 +47,19 @@ namespace Kompas
 
             //TODO: switch-case
             // Выбираем плоскость
-            if (perspective == 1)
+            switch (perspective)
             {
-                this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY);
-            }
-            else if (perspective == 2)
-            {
-                this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ);
-            }
-            else if (perspective == 3)
-            {
-                this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ);
-            }
-            else
-            {
-                throw new ArgumentException("Некорректная плоскость. Допустимые значения: 1, 2, 3.");
+                case 1:
+                    this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY);
+                    break;
+                case 2:
+                    this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ);
+                    break;
+                case 3:
+                    this._plane = (ksEntity)this._part.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ);
+                    break;
+                default:
+                    throw new ArgumentException("Некорректная плоскость. Допустимые значения: 1, 2, 3.");
             }
 
             // Устанавливаем плоскость для эскиза

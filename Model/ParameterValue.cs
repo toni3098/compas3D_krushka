@@ -30,11 +30,18 @@ namespace MugPlugin
         /// <param name="value">Текущее значение параметра.</param>
         public ParameterValue(double minValue, double maxValue, double value)
         {
-            Validate(minValue, maxValue, value);
+            try
+            {
+                Validate(minValue, maxValue, value);
 
-            _minValue = minValue;
-            _maxValue = maxValue;
-            _value = value;
+                _minValue = minValue;
+                _maxValue = maxValue;
+                _value = value;
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException($"Ошибка при инициализации ParameterValue: {ex.Message}", ex);
+            }
         }
 
         /// <summary>
@@ -45,9 +52,15 @@ namespace MugPlugin
             get => _maxValue;
             set
             {
-                //TODO: validation?
-                Validate(_minValue, value, _value);
-                _maxValue = value;
+                try
+                {
+                    Validate(_minValue, value, _value);
+                    _maxValue = value;
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Ошибка при установке MaxValue: {ex.Message}", ex);
+                }
             }
         }
 
@@ -59,9 +72,15 @@ namespace MugPlugin
             get => _minValue;
             set
             {
-                //TODO: validation?
-                Validate(value, _maxValue, _value);
-                _minValue = value;
+                try
+                {
+                    Validate(value, _maxValue, _value);
+                    _minValue = value;
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Ошибка при установке MinValue: {ex.Message}", ex);
+                }
             }
         }
 
@@ -73,8 +92,15 @@ namespace MugPlugin
             get => _value;
             set
             {
-                Validate(_minValue, _maxValue, value);
-                _value = value;
+                try
+                {
+                    Validate(_minValue, _maxValue, value);
+                    _value = value;
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Ошибка при установке Value: {ex.Message}", ex);
+                }
             }
         }
 

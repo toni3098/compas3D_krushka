@@ -181,12 +181,14 @@ namespace MugPlugin
                 }
 
                 double expectedValue = _parameters[baseParam].Value * factor;
+                double actualValue = _parameters[dependentParam].Value;
 
-                if (Math.Abs(_parameters[dependentParam].Value - expectedValue) > Tolerance)
+                if (Math.Abs(actualValue - expectedValue) > Tolerance)
                 {
                     //TODO: RSDN
-                    throw new ArgumentException($"Значение {dependentParam} должно быть в пределах " +
-                        $"±{Tolerance} мм от {factor} * {baseParam}, что составляет {expectedValue}.");
+                    throw new ArgumentException($"Значение {dependentParam} должно " +
+                        $"быть равно {expectedValue:F2} (±{Tolerance} мм), " +
+                        $"но фактическое значение равно {actualValue:F2}.");
                 }
             }
         }

@@ -1,207 +1,121 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MugPlugin;
+using MugPlugin;  // Assurez-vous d'utiliser le bon namespace pour ParameterValue
 using System;
 
 namespace UnitTestProject
 {
     /// <summary>
-    /// Тестовый класс для проверки значений параметров и их зависимостей.
+    /// Класс, содержащий тесты для проверки функциональности класса <see cref="MugPlugin.ParameterValue"/>.
     /// </summary>
     [TestClass]
     public class ParameterValueTests
     {
         /// <summary>
-        /// Проверка инициализации ширины корпуса (BodyWidth). Значения находятся в допустимом диапазоне.
+        /// Тест проверяет, что объект "ParameterValue" корректно инициализируется с заданными значениями.
         /// </summary>
         [TestMethod]
-        public void BodyWidth_Initialization_ShouldPass()
+        public void ParameterValue_Initialization_ShouldPass()
         {
-            var parameter = new ParameterValue(100, 150, 120);
-            Assert.AreEqual(100, parameter.MinValue);
-            Assert.AreEqual(150, parameter.MaxValue);
-            Assert.AreEqual(120, parameter.Value);
+            var parameter = new ParameterValue(287, 420, 350);
+            Assert.AreEqual(287, parameter.MinValue);
+            Assert.AreEqual(420, parameter.MaxValue);
+            Assert.AreEqual(350, parameter.Value);
         }
 
         /// <summary>
-        /// Проверка ширины корпуса (BodyWidth), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
+        /// Тест проверяет, что при создании объекта ParameterValue с некорректным диапазоном выбрасывается исключение ArgumentException.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BodyWidth_InvalidValue_ShouldThrowException()
+        public void ParameterValue_InvalidMinMax_ShouldThrowException()
         {
-            new ParameterValue(100, 150, 160);
+            Assert.ThrowsException<ArgumentException>(() => new ParameterValue(500, 400, 450));
         }
 
         /// <summary>
-        /// Проверка инициализации ширины основания (BaseWidth). Значения находятся в допустимом диапазоне.
+        /// Тест проверяет, что при создании объекта ParameterValue со значением вне допустимого диапазона выбрасывается исключение ArgumentException.
         /// </summary>
         [TestMethod]
-        public void BaseWidth_Initialization_ShouldPass()
+        public void ParameterValue_OutOfRange_ShouldThrowException()
         {
-            var parameter = new ParameterValue(70, 100, 85);
-            Assert.AreEqual(70, parameter.MinValue);
-            Assert.AreEqual(100, parameter.MaxValue);
-            Assert.AreEqual(85, parameter.Value);
+            Assert.ThrowsException<ArgumentException>(() => new ParameterValue(287, 420, 500));
         }
 
         /// <summary>
-        /// Проверка ширины основания (BaseWidth), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
+        /// Тест проверяет, что значение объекта ParameterValue корректно обновляется, если новое значение находится в допустимом диапазоне.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BaseWidth_InvalidValue_ShouldThrowException()
+        public void ParameterValue_UpdateWithinRange_ShouldPass()
         {
-            new ParameterValue(70, 100, 60);
+            var parameter = new ParameterValue(287, 420, 350);
+            parameter.Value = 400;
+            Assert.AreEqual(400, parameter.Value);
         }
 
         /// <summary>
-        /// Проверка инициализации радиуса корпуса (BodyRadius1). Значения находятся в допустимом диапазоне.
+        /// Тест проверяет, что при попытке обновить значение объекта ParameterValue значением вне допустимого диапазона
+        /// выбрасывается исключение ArgumentException.
         /// </summary>
         [TestMethod]
-        public void BodyRadius1_Initialization_ShouldPass()
+        public void ParameterValue_UpdateOutOfRange_ShouldThrowException()
         {
-            var parameter = new ParameterValue(300, 350, 325);
-            Assert.AreEqual(300, parameter.MinValue);
-            Assert.AreEqual(350, parameter.MaxValue);
-            Assert.AreEqual(325, parameter.Value);
+            var parameter = new ParameterValue(287, 420, 350);
+            Assert.ThrowsException<ArgumentException>(() => parameter.Value = 500);
         }
 
         /// <summary>
-        /// Проверка радиуса корпуса (BodyRadius1), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
+        ///  Тест, который проверяет, что обновление значения объекта ParameterValue в пределах допустимого диапазона не вызывает исключения.
+        ///  Этот тест дублирует функциональность теста ParameterValue_UpdateWithinRange_ShouldPass.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BodyRadius1_InvalidValue_ShouldThrowException()
+        public void ParameterValue_UpdateWithinRange_ShouldNotThrowException()
         {
-            new ParameterValue(300, 350, 250);
+            var parameter = new ParameterValue(287, 420, 350);
+            parameter.Value = 400;
+            Assert.AreEqual(400, parameter.Value);
         }
 
         /// <summary>
-        /// Проверка инициализации радиуса ручки (HandleRadius3). Значения находятся в допустимом диапазоне.
+        /// Тест проверяет, что при попытке установить MaxValue с некорректным диапазоном выбрасывается исключение ArgumentException.
         /// </summary>
         [TestMethod]
-        public void HandleRadius3_Initialization_ShouldPass()
+        public void ParameterValue_SetMaxValueInvalid_ShouldThrowException()
         {
-            var parameter = new ParameterValue(10, 20, 15);
-            Assert.AreEqual(10, parameter.MinValue);
-            Assert.AreEqual(20, parameter.MaxValue);
-            Assert.AreEqual(15, parameter.Value);
+            var parameter = new ParameterValue(287, 420, 350);
+            Assert.ThrowsException<ArgumentException>(() => parameter.MaxValue = 200);
         }
 
         /// <summary>
-        /// Проверка радиуса ручки (HandleRadius3), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
+        /// Тест проверяет, что при попытке установить MinValue с некорректным диапазоном выбрасывается исключение ArgumentException.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void HandleRadius3_InvalidValue_ShouldThrowException()
+        public void ParameterValue_SetMinValueInvalid_ShouldThrowException()
         {
-            new ParameterValue(10, 20, 25);
+            var parameter = new ParameterValue(287, 420, 350);
+            Assert.ThrowsException<ArgumentException>(() => parameter.MinValue = 500);
         }
 
         /// <summary>
-        /// Проверка инициализации радиуса ручки (HandleRadius5). Значения находятся в допустимом диапазоне.
+        /// Тест проверяет, что при попытке обновить значение объекта ParameterValue с правильными диапазонами после изменения MaxValue.
         /// </summary>
         [TestMethod]
-        public void HandleRadius5_Initialization_ShouldPass()
+        public void ParameterValue_SetMaxValueValid_ShouldPass()
         {
-            var parameter = new ParameterValue(75, 85, 80);
-            Assert.AreEqual(75, parameter.MinValue);
-            Assert.AreEqual(85, parameter.MaxValue);
-            Assert.AreEqual(80, parameter.Value);
+            var parameter = new ParameterValue(287, 420, 350);
+            parameter.MaxValue = 500;
+            parameter.Value = 400; // Should pass as 400 is within the new range
+            Assert.AreEqual(400, parameter.Value);
         }
 
         /// <summary>
-        /// Проверка радиуса ручки (HandleRadius5), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
+        /// Тест проверяет, что при попытке обновить значение объекта ParameterValue с правильными диапазонами после изменения MinValue.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void HandleRadius5_InvalidValue_ShouldThrowException()
+        public void ParameterValue_SetMinValueValid_ShouldPass()
         {
-            new ParameterValue(75, 85, 90);
-        }
-
-        /// <summary>
-        /// Проверка инициализации длины корпуса (BodyLength). Значения находятся в допустимом диапазоне.
-        /// </summary>
-        [TestMethod]
-        public void BodyLength_Initialization_ShouldPass()
-        {
-            var parameter = new ParameterValue(100, 150, 125);
-            Assert.AreEqual(100, parameter.MinValue);
-            Assert.AreEqual(150, parameter.MaxValue);
-            Assert.AreEqual(125, parameter.Value);
-        }
-
-        /// <summary>
-        /// Проверка длины корпуса (BodyLength), если значение выходит за пределы диапазона. Ожидается исключение ArgumentException.
-        /// </summary>
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BodyLength_InvalidValue_ShouldThrowException()
-        {
-            new ParameterValue(100, 150, 90);
-        }
-
-        /// Тесты зависимостей
-
-        /// <summary>
-        /// Проверка зависимости ширины внутренней верхней части корпуса (InteriorUpWidth).
-        /// </summary>
-        [TestMethod]
-        public void InteriorUpWidth_ValidDependency_ShouldPass()
-        {
-            var bodyWidth = new ParameterValue(100, 150, 120);
-            // 9/10 от 120
-            var interiorUpWidth = new ParameterValue(90, 135, 108); 
-            Assert.AreEqual(108, interiorUpWidth.Value);
-        }
-
-        /// <summary>
-        /// Проверка зависимости ширины внутреннего основания (InteriorBaseWidth).
-        /// </summary>
-        [TestMethod]
-        public void InteriorBaseWidth_ValidDependency_ShouldPass()
-        {
-            var baseWidth = new ParameterValue(70, 100, 80);
-            // 9/10 от 80
-            var interiorBaseWidth = new ParameterValue(63, 90, 72); 
-            Assert.AreEqual(72, interiorBaseWidth.Value);
-        }
-
-        /// <summary>
-        /// Проверка зависимости радиуса корпуса (BodyRadius2).
-        /// </summary>
-        [TestMethod]
-        public void BodyRadius2_ValidDependency_ShouldPass()
-        {
-            var bodyRadius1 = new ParameterValue(300, 350, 320);
-            // 5/8 от 320
-            var bodyRadius2 = new ParameterValue(187.5, 218.75, 200); 
-            Assert.AreEqual(200, bodyRadius2.Value);
-        }
-
-        /// <summary>
-        /// Проверка зависимости радиуса ручки (HandleRadius4).
-        /// </summary>
-        [TestMethod]
-        public void HandleRadius4_ValidDependency_ShouldPass()
-        {
-            var handleRadius3 = new ParameterValue(10, 20, 15);
-            // 3 * 15
-            var handleRadius4 = new ParameterValue(30, 60, 45); 
-            Assert.AreEqual(45, handleRadius4.Value);
-        }
-
-        /// <summary>
-        /// Проверка зависимости длины ручки (HandleLength).
-        /// </summary>
-        [TestMethod]
-        public void HandleLength_ValidDependency_ShouldPass()
-        {
-            var bodyLength = new ParameterValue(100, 150, 120);
-            // 3/4 от 120
-            var handleLength = new ParameterValue(75, 112.5, 90); 
-            Assert.AreEqual(90, handleLength.Value);
+            var parameter = new ParameterValue(287, 420, 350);
+            parameter.MinValue = 200;
+            parameter.Value = 250; // Should pass as 250 is within the new range
+            Assert.AreEqual(250, parameter.Value);
         }
     }
 }

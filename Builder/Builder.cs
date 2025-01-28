@@ -89,7 +89,8 @@ namespace MugPlugin
             // Толщина
             double epaisseur = halfBodyWidth - halfInteriorUpWidth; 
 
-            double[,] pointsArray = {
+            double[,] pointsArray = 
+            {
                 { 
                     0, 0, 
                     -halfBaseWidth, 0, 
@@ -109,7 +110,8 @@ namespace MugPlugin
                 },
             };
 
-            double[,] pointsArcArray = {
+            double[,] pointsArcArray = 
+            {
                 {
                     -halfBaseWidth, 0, 
                     -halfBodyWidth+2, -halfBodyLenght, 
@@ -142,7 +144,8 @@ namespace MugPlugin
             double epaisseur = 2 + (halfBodyWidth - halfInteriorUpWidth);
             double halfBodyLenght = halfBodyWidth / 2;
 
-            double[,] pointsArray = {
+            double[,] pointsArray = 
+            {
                 { 
                     0, -epaisseur, 
                     -halfInteriorBaseWidth, -epaisseur, 
@@ -278,7 +281,8 @@ namespace MugPlugin
             // Толщина
             double epaisseur = halfBodyWidth - halfInteriorUpWidth; 
 
-            double[,] pointsArray = {
+            double[,] pointsArray = 
+            {
                 { 
                     0, -bodyLength, 
                     -halfBodyWidth, -bodyLength, 
@@ -321,7 +325,8 @@ namespace MugPlugin
                 },
             };
             
-            double[,] pointsArcArray = {
+            double[,] pointsArcArray = 
+            {
                 {-halfBodyWidth, -bodyLength, 
                     -halfBodyWidth, -bodyLength-(epaisseur/4),
                     -halfInteriorUpWidth, -bodyLength-epaisseur},
@@ -410,7 +415,8 @@ namespace MugPlugin
                 },
             };
             
-            double[,] pointsArcArray = {
+            double[,] pointsArcArray = 
+            {
                 {
                     -halfBaseWidth, 0, 
                     -halfBaseWidth-(epaisseur/2), -epaisseur/4,
@@ -455,7 +461,8 @@ namespace MugPlugin
             double epaisseur = halfBodyWidth - halfInteriorUpWidth;
             double halfInteriorBase = interiorBaseWidth / 2;
 
-            double[,] pointsArray = {
+            double[,] pointsArray = 
+            {
                 { 
                     0, epaisseur, 
                     -halfInteriorBase, epaisseur, 
@@ -487,7 +494,8 @@ namespace MugPlugin
                 },
             };
 
-            double[,] pointsArcArray = {
+            double[,] pointsArcArray = 
+            {
                 {
                     -halfInteriorBase, epaisseur, 
                     -halfInteriorBase-(epaisseur/4), epaisseur+1,

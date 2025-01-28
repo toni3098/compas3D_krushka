@@ -1,6 +1,6 @@
 ﻿namespace MugPlugin
 {
-    partial class MainForm
+    partial class MugPlugin
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MugPlugin));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.limitL_label = new System.Windows.Forms.Label();
             this.limitR5_label = new System.Windows.Forms.Label();
@@ -150,8 +150,7 @@
             this.L_textBox.Name = "L_textBox";
             this.L_textBox.Size = new System.Drawing.Size(172, 22);
             this.L_textBox.TabIndex = 11;
-            this.L_textBox.TextChanged += new System.EventHandler(this.L_textBox_TextChanged);
-            this.L_textBox.Leave += new System.EventHandler(this.L_textBox_Leave);
+            this.L_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // radiusR5_textBox
             // 
@@ -159,8 +158,7 @@
             this.radiusR5_textBox.Name = "radiusR5_textBox";
             this.radiusR5_textBox.Size = new System.Drawing.Size(172, 22);
             this.radiusR5_textBox.TabIndex = 10;
-            this.radiusR5_textBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            this.radiusR5_textBox.Leave += new System.EventHandler(this.radiusR5_textBox_Leave);
+            this.radiusR5_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // radiusR3_textBox
             // 
@@ -168,8 +166,7 @@
             this.radiusR3_textBox.Name = "radiusR3_textBox";
             this.radiusR3_textBox.Size = new System.Drawing.Size(172, 22);
             this.radiusR3_textBox.TabIndex = 9;
-            this.radiusR3_textBox.TextChanged += new System.EventHandler(this.radiusR3_textBox_TextChanged);
-            this.radiusR3_textBox.Leave += new System.EventHandler(this.radiusR3_textBox_Leave);
+            this.radiusR3_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // radiusR1_textBox
             // 
@@ -177,8 +174,7 @@
             this.radiusR1_textBox.Name = "radiusR1_textBox";
             this.radiusR1_textBox.Size = new System.Drawing.Size(172, 22);
             this.radiusR1_textBox.TabIndex = 8;
-            this.radiusR1_textBox.TextChanged += new System.EventHandler(this.radiusR1_textBox_TextChanged);
-            this.radiusR1_textBox.Leave += new System.EventHandler(this.radiusR1_textBox_Leave);
+            this.radiusR1_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // diameterD4_textBox
             // 
@@ -186,8 +182,7 @@
             this.diameterD4_textBox.Name = "diameterD4_textBox";
             this.diameterD4_textBox.Size = new System.Drawing.Size(172, 22);
             this.diameterD4_textBox.TabIndex = 7;
-            this.diameterD4_textBox.TextChanged += new System.EventHandler(this.diameterD4_textBox_TextChanged);
-            this.diameterD4_textBox.Leave += new System.EventHandler(this.diameterD4_textBox_Leave);
+            this.diameterD4_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // diameterD1_textBox
             // 
@@ -195,8 +190,7 @@
             this.diameterD1_textBox.Name = "diameterD1_textBox";
             this.diameterD1_textBox.Size = new System.Drawing.Size(172, 22);
             this.diameterD1_textBox.TabIndex = 6;
-            this.diameterD1_textBox.TextChanged += new System.EventHandler(this.diameterD1_textBox_TextChanged);
-            this.diameterD1_textBox.Leave += new System.EventHandler(this.diameterD1_textBox_Leave);
+            this.diameterD1_textBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
             // L_label
             // 
@@ -233,7 +227,6 @@
             this.radiusR1_label.Size = new System.Drawing.Size(260, 16);
             this.radiusR1_label.TabIndex = 2;
             this.radiusR1_label.Text = "Радиус кривизны до верха кружки (R1)";
-            this.radiusR1_label.Click += new System.EventHandler(this.radiusR1_label_Click);
             // 
             // diameterD4_label
             // 
@@ -328,7 +321,7 @@
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // MainForm
+            // MugPlugin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -338,7 +331,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox1);
-            this.Name = "MainForm";
+            this.Name = "MugPlugin";
             this.Text = "Кружка";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);

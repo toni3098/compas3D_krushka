@@ -8,13 +8,13 @@ namespace MugPlugin
     /// <summary>
     /// Класс MainForm, представляющий основную форму приложения.
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MugPlugin : Form
     {
         //TODO: RSDN
         /// <summary>
         /// Поле хранящее в себе ошибок.
         /// </summary>
-        private List<string> errorMessages = new List<string>();
+        public List<string> errorMessages = new List<string>();
 
         /// <summary>
         /// Поле хранящее объект класса Builder.
@@ -27,9 +27,9 @@ namespace MugPlugin
         private Parameters _parameters = new Parameters();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainForm"/> class.
+        /// Initializes a new instance of the <see cref="MugPlugin"/> class.
         /// </summary>
-        public MainForm()
+        public MugPlugin()
         {
             this.InitializeComponent();
             error_label.Visible = false;
@@ -138,40 +138,6 @@ namespace MugPlugin
             }
         }
 
-         //TODO: duplication
-        private void diameterD1_textBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void diameterD4_textBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-
-        private void radiusR1_textBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-
-        private void cancel_button_Click(object sender, EventArgs e)
-        {
-        }
-
-
-        private void radiusR3_textBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-
-        private void L_textBox_TextChanged(object sender, EventArgs e)
-        {
-        }
-
         /// <summary>
         /// Обработчик события для кнопки создания.
         /// Проверяет цвета фонов текстовых полей и, если все они корректны, вызывает метод построения.
@@ -245,87 +211,58 @@ namespace MugPlugin
 
          //TODO: duplication
         /// <summary>
-        /// Обработчик события покидания поля ввода для диаметра кружки (D1).
+        /// Обработчик события покидания поля ввода для всех текстовых полей.
         /// Выполняет валидацию типа и значения параметра.
         /// </summary>
-        private void diameterD1_textBox_Leave(object sender, EventArgs e)
+        private void TextBox_Leave(object sender, EventArgs e)
         {
-            ParameterType parameterType = ParameterType.BodyWidth;
-            this.ValidateType(this.diameterD1_textBox, parameterType);
-            if (this.diameterD1_textBox.BackColor != SystemColors.Window)
+            if (sender is TextBox textBox)
             {
-                this.ValidateValue(this.diameterD1_textBox, parameterType);
-            }
-        }
+                ParameterType parameterType;
 
-         //TODO: duplication
-        /// <summary>
-        /// Обработчик события покидания поля ввода для диаметра основания (D4).
-        /// Выполняет валидацию типа и значения параметра.
-        /// </summary>
-        private void diameterD4_textBox_Leave(object sender, EventArgs e)
-        {
-            ParameterType parameterType = ParameterType.BaseWidth;
-            this.ValidateType(this.diameterD4_textBox, parameterType);
-            if (this.diameterD1_textBox.BackColor != SystemColors.Window)
-            {
-                this.ValidateValue(this.diameterD4_textBox, ParameterType.BaseWidth);
-            }
-        }
+                // Определение типа параметра на основе имени текстового поля
+                switch (textBox.Name)
+                {
+                    // Обработчик события покидания поля ввода для диаметра кружки (D1).
+                    case "diameterD1_textBox":
+                        parameterType = ParameterType.BodyWidth;
+                        break;
 
-        /// <summary>
-        /// Обработчик события покидания поля ввода для радиуса тела (R1).
-        /// Выполняет валидацию типа и значения параметра.
-        /// </summary>
-        private void radiusR1_textBox_Leave(object sender, EventArgs e)
-        {
-            ParameterType parameterType = ParameterType.BodyRadius1;
-            this.ValidateType(this.radiusR1_textBox, parameterType);
-            if (this.radiusR1_textBox.BackColor != SystemColors.Window)
-            {
-                this.ValidateValue(this.radiusR1_textBox, ParameterType.BodyRadius1);
-            }
-        }
+                    // Обработчик события покидания поля ввода для диаметра основания (D4).
+                    case "diameterD4_textBox":
+                        parameterType = ParameterType.BaseWidth;
+                        break;
 
-        /// <summary>
-        /// Обработчик события покидания поля ввода для радиуса ручки (R3).
-        /// Выполняет валидацию типа и значения параметра.
-        /// </summary>
-        private void radiusR3_textBox_Leave(object sender, EventArgs e)
-        {
-            ParameterType parameterType = ParameterType.HandleRadius3;
-            this.ValidateType(this.radiusR3_textBox, parameterType);
-            if (this.radiusR1_textBox.BackColor != SystemColors.Window)
-            {
-                this.ValidateValue(this.radiusR3_textBox, ParameterType.HandleRadius3);
-            }
-        }
+                    // Обработчик события покидания поля ввода для радиуса тела (R1).
+                    case "radiusR1_textBox":
+                        parameterType = ParameterType.BodyRadius1;
+                        break;
 
-        /// <summary>
-        /// Обработчик события покидания поля ввода для радиуса ручки (R5).
-        /// Выполняет валидацию типа и значения параметра.
-        /// </summary>
-        private void radiusR5_textBox_Leave(object sender, EventArgs e)
-        {
-            ParameterType parameterType = ParameterType.HandleRadius5;
-            this.ValidateType(this.radiusR5_textBox, parameterType);
-            if (this.radiusR5_textBox.BackColor != SystemColors.Window)
-            {
-                this.ValidateValue(this.radiusR5_textBox, ParameterType.HandleRadius5);
-            }
-        }
+                    // Обработчик события покидания поля ввода для радиуса ручки (R3).
+                    case "radiusR3_textBox":
+                        parameterType = ParameterType.HandleRadius3;
+                        break;
 
-        /// <summary>
-        /// Обработчик события покидания поля ввода для высоты кружки (L).
-        /// Выполняет валидацию типа и значения параметра.
-        /// </summary>
-        private void L_textBox_Leave(object sender, EventArgs e)
-        {
-            ParameterType parameterType = ParameterType.BodyLength;
-            this.ValidateType(this.L_textBox, parameterType);
-            if (this.L_textBox.BackColor != SystemColors.Window)
-            {
-                this.ValidateValue(this.L_textBox, ParameterType.BodyLength);
+                    // Обработчик события покидания поля ввода для радиуса ручки (R5).
+                    case "radiusR5_textBox":
+                        parameterType = ParameterType.HandleRadius5;
+                        break;
+
+                    // Обработчик события покидания поля ввода для высоты кружки (L).
+                    case "L_textBox":
+                        parameterType = ParameterType.BodyLength;
+                        break;
+                    default:
+                        // Неизвестный текстовый блок
+                        return;
+                }
+
+                // Выполнение валидации типа и значения
+                this.ValidateType(textBox, parameterType);
+                if (textBox.BackColor != SystemColors.Window)
+                {
+                    this.ValidateValue(textBox, parameterType);
+                }
             }
         }
 
@@ -486,7 +423,6 @@ namespace MugPlugin
         /// </summary>
         /// <param name="textBox">Используемый текстбокс.</param>
         /// <param name="parameterType">Тип параметра.</param>
-
         private void ValidateValue(System.Windows.Forms.TextBox textBox, ParameterType parameterType)
         {
             ClearErrors();
@@ -575,12 +511,6 @@ namespace MugPlugin
             }
             CheckTextBox();
         }
-
-        private void radiusR1_label_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
         /// <summary>
         /// Сигналы для построения подставки и подподставки.

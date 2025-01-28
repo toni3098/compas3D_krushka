@@ -231,7 +231,7 @@ namespace Kompas
                         extrusionDef.SetSideParam(
                             // прямое направление
                             true, 
-                                  // строго на глубину
+                            // строго на глубину
                             (short)End_Type.etBlind,    
                             length,
                             0,

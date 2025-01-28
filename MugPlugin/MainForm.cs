@@ -55,31 +55,7 @@ namespace MugPlugin
             comboBox1.SelectedIndex = 2;
             
         }
-
-        /// <summary>
-        /// Отображает ошибки, если они есть.
-        /// </summary>
-        private void ShowErrors()
-        {
-            if (errorMessages.Count > 0)
-            {
-                error_label.Visible = true;
-                error_label.Text = string.Join("\n", errorMessages);
-            }
-            else
-            {
-                HideError();
-            }
-        }
-
-        /// <summary>
-        /// Скрывает ошибку и очищает список сообщений об ошибках.
-        /// </summary>
-        private void HideError()
-        {
-            error_label.Visible = false;
-            errorMessages.Clear();
-        }
+        
 
         /// <summary>
         /// Очищает список ошибок и текст ошибки на метке.
@@ -179,7 +155,6 @@ namespace MugPlugin
 
         private void cancel_button_Click(object sender, EventArgs e)
         {
-            this.Close();
         }
 
 

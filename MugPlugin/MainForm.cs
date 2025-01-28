@@ -597,7 +597,6 @@ namespace MugPlugin
             MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
         }
 
-
         /// <summary>
         /// Сигналы для построения крышки.
         /// </summary>

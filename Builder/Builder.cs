@@ -162,8 +162,8 @@ namespace MugPlugin
                 },
             };
 
-            double[,] pointsArcArray = {
-                //TODO: RSDN
+            double[,] pointsArcArray = 
+            {
                 {
                     -halfInteriorBaseWidth, -epaisseur, 
                     -(halfBodyWidth - epaisseur - 3) + 2, -(halfBodyLenght-epaisseur), 
@@ -377,7 +377,8 @@ namespace MugPlugin
             // D3/2
             double halfInteriorBase = interiorBaseWidth / 2; 
 
-            double[,] pointsArray = {
+            double[,] pointsArray = 
+            {
                 { 
                     0, 0, 
                     -halfBaseWidth, 0, 

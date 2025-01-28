@@ -115,7 +115,6 @@ namespace MugPlugin
             switch (type)
             {
                 case ParameterType.BodyWidth:
-                    //TODO: const
                     if (value < min - Tolerance || value > max + Tolerance)
                     {
                         throw new ArgumentException($"Ширина тела должна быть в диапазоне " +
@@ -185,7 +184,6 @@ namespace MugPlugin
 
                 if (Math.Abs(actualValue - expectedValue) > Tolerance)
                 {
-                    //TODO: RSDN
                     throw new ArgumentException($"Значение {dependentParam} должно " +
                         $"быть равно {expectedValue:F2} (±{Tolerance} мм), " +
                         $"но фактическое значение равно {actualValue:F2}.");

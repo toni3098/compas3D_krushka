@@ -1,2 +1,2 @@
-# compas3D_krusha
+# compas3D_krushka
 Разработка плагина кружка для Компас 3D

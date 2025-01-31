@@ -327,9 +327,11 @@ namespace MugPlugin
             
             double[,] pointsArcArray = 
             {
-                {-halfBodyWidth, -bodyLength, 
+                {
+                    -halfBodyWidth, -bodyLength, 
                     -halfBodyWidth, -bodyLength-(epaisseur/4),
-                    -halfInteriorUpWidth, -bodyLength-epaisseur},
+                    -halfInteriorUpWidth, -bodyLength-epaisseur
+                },
             };
 
             // Создание эскиза на плоскости

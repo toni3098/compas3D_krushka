@@ -1,5 +1,6 @@
 ﻿namespace MugPlugin
 {
+    //TODO: refactor to parameters
     /// <summary>
     /// Сигналы для строительства подставки, подподставки и крышки.
     /// </summary>

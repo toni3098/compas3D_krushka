@@ -45,7 +45,6 @@ namespace Kompas
             this._sketchEntity = (ksEntity)this._part.NewEntity((short)Obj3dType.o3d_sketch);
             sketchDef = (ksSketchDefinition)this._sketchEntity.GetDefinition();
 
-            //TODO: switch-case
             // Выбираем плоскость
             switch (perspective)
             {

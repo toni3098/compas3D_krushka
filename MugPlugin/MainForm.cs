@@ -44,6 +44,7 @@ namespace MugPlugin
             this._parameters.AllParameters = new Dictionary<ParameterType, ParameterValue>();
             if (_parameters.AllParameters.Count == 0)
             {
+                //TODO: RSDN
                 _parameters.AllParameters[ParameterType.BodyWidth] = new ParameterValue(100, 150, 120);
                 _parameters.AllParameters[ParameterType.BaseWidth] = new ParameterValue(70, 100, 85);
                 _parameters.AllParameters[ParameterType.BodyRadius1] = new ParameterValue(300, 350, 320);
@@ -95,14 +96,14 @@ namespace MugPlugin
             var heightRange = _parameters.AllParameters[ParameterType.BodyLength];
 
             var textBoxToParameterMapping = new Dictionary<System.Windows.Forms.TextBox, (string ErrorMessage, ParameterValue Range)>
-{
-            { diameterD1_textBox, ($"Диаметр кружки должен быть между {{0}} мм - {{1}} мм", diameterD1Range) },
-            { diameterD4_textBox, ($"Диаметр основания кружки должен быть между {{0}} мм - {{1}} мм, и меньше чем диаметр кружки", diameterD4Range) },
-            { radiusR1_textBox, ($"Радиус кривизны до верха кружки должен быть между {{0}} мм - {{1}} мм", radiusR1Range) },
-            { radiusR3_textBox, ($"Радиус 1-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR3Range) },
-            { radiusR5_textBox, ($"Радиус 3-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR5Range) },
-            { L_textBox, ($"Высота кружки должна быть между {{0}} мм - {{1}} мм, и больше чем диаметр кружки", heightRange) }
-};
+            {//TODO: RSDN
+                  { diameterD1_textBox, ($"Диаметр кружки должен быть между {{0}} мм - {{1}} мм", diameterD1Range) },
+                  { diameterD4_textBox, ($"Диаметр основания кружки должен быть между {{0}} мм - {{1}} мм, и меньше чем диаметр кружки", diameterD4Range) },
+                  { radiusR1_textBox, ($"Радиус кривизны до верха кружки должен быть между {{0}} мм - {{1}} мм", radiusR1Range) },
+                  { radiusR3_textBox, ($"Радиус 1-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR3Range) },
+                  { radiusR5_textBox, ($"Радиус 3-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR5Range) },
+                  { L_textBox, ($"Высота кружки должна быть между {{0}} мм - {{1}} мм, и больше чем диаметр кружки", heightRange) }
+            };
 
             foreach (var entry in textBoxToParameterMapping)
             {
@@ -233,7 +234,6 @@ namespace MugPlugin
             }
         }
 
-         //TODO: duplication
         /// <summary>
         /// Обработчик события покидания поля ввода для всех текстовых полей.
         /// Выполняет валидацию типа и значения параметра.

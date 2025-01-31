@@ -139,6 +139,23 @@ namespace MugPlugin
         }
 
         /// <summary>
+        /// Проверяет выбранное значение в comboBox при нажатии на "Построить".
+        /// </summary>
+        /// <returns>True, если выбор корректен, иначе false.</returns>
+        private bool CheckComboBoxSelection()
+        {
+            // Список допустимых значений
+            List<string> validItems = new List<string> { "Блюдце", "Блюдце и под чашкой", "Ничего" };
+
+            // Проверяем, содержится ли выбранный элемент в списке допустимых значений
+            if (!validItems.Contains(comboBox1.SelectedItem?.ToString()))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Обработчик события для кнопки создания.
         /// Проверяет цвета фонов текстовых полей и, если все они корректны, вызывает метод построения.
         /// </summary>
@@ -192,6 +209,13 @@ namespace MugPlugin
             {
                 hasError = true;
                 errorMessage += "• Высота кружки (L) неверна.\n";
+            }
+
+            // Проверка выбора в ComboBox
+            if (!CheckComboBoxSelection())
+            {
+                hasError = true;
+                errorMessage += "• Некорректный выбор в ComboBox. Пожалуйста, выберите допустимый вариант.\n";
             }
 
             // Если ошибки обнаружены, показываем сообщение с красным крестом

@@ -35,17 +35,17 @@ namespace MugPlugin
             BuildHandle(parameters);
 
             //  Построение крышки
-            if (Flags.krishka == true)
+            if (Parameters.Flags.krishka == true)
             {
                 BuildKrishka(parameters);
             }
 
             // Построение подставки и подподставки
-            if (Flags.flag == 0)
+            if (Parameters.Flags.flag == 0)
             {
                 BuildTarelka(parameters);
             }
-            else if (Flags.flag == 1)
+            else if (Parameters.Flags.flag == 1)
             {
                 BuildTarelka(parameters);
                 BuildPodTarelka(parameters);
@@ -132,10 +132,14 @@ namespace MugPlugin
         /// </summary>
         private void BuildInterior(Parameters parameters)
         {
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
-            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
-            double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
-            double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value;
+            double interiorUpWidth = 
+                parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorBaseWidth = 
+                parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+            double bodyWidth = 
+                parameters.AllParameters[ParameterType.BodyWidth].Value;
+            double bodyLength = 
+                parameters.AllParameters[ParameterType.BodyLength].Value;
 
             double halfInteriorUpWidth = interiorUpWidth / 2;
             double halfInteriorBaseWidth = interiorBaseWidth / 2;
@@ -268,7 +272,8 @@ namespace MugPlugin
             //D1
             double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
             //D2
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorUpWidth = 
+                parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
             // L
             double bodyLength = parameters.AllParameters[ParameterType.BodyLength].Value;
 
@@ -363,10 +368,12 @@ namespace MugPlugin
             double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
 
             //D2
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorUpWidth = 
+                parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
 
             //D3
-            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+            double interiorBaseWidth = 
+                parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
 
 
             // D1/2
@@ -454,8 +461,10 @@ namespace MugPlugin
             // Получаем параметры
             double bodyWidth = parameters.AllParameters[ParameterType.BodyWidth].Value;
             double baseWidth = parameters.AllParameters[ParameterType.BaseWidth].Value;
-            double interiorUpWidth = parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
-            double interiorBaseWidth = parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
+            double interiorUpWidth = 
+                parameters.AllParameters[ParameterType.InteriorUpWidth].Value;
+            double interiorBaseWidth = 
+                parameters.AllParameters[ParameterType.InteriorBaseWidth].Value;
 
             double halfBodyWidth = bodyWidth / 2;
             double halfBaseWidth = baseWidth / 2;
@@ -524,7 +533,8 @@ namespace MugPlugin
                 !parameters.AllParameters.ContainsKey(ParameterType.BodyLength) ||
                 !parameters.AllParameters.ContainsKey(ParameterType.HandleLength))
             {
-                throw new ArgumentException("Все необходимые параметры должны быть предоставлены.");
+                throw new ArgumentException("Все необходимые параметры должны " +
+                    "быть предоставлены.");
             }
         }
     }

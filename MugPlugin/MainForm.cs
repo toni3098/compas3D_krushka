@@ -45,12 +45,18 @@ namespace MugPlugin
             if (_parameters.AllParameters.Count == 0)
             {
                 //TODO: RSDN
-                _parameters.AllParameters[ParameterType.BodyWidth] = new ParameterValue(100, 150, 120);
-                _parameters.AllParameters[ParameterType.BaseWidth] = new ParameterValue(70, 100, 85);
-                _parameters.AllParameters[ParameterType.BodyRadius1] = new ParameterValue(300, 350, 320);
-                _parameters.AllParameters[ParameterType.HandleRadius3] = new ParameterValue(10, 20, 15);
-                _parameters.AllParameters[ParameterType.HandleRadius5] = new ParameterValue(75, 85, 80);
-                _parameters.AllParameters[ParameterType.BodyLength] = new ParameterValue(100, 150, 120);
+                _parameters.AllParameters[ParameterType.BodyWidth] = 
+                    new ParameterValue(100, 150, 120);
+                _parameters.AllParameters[ParameterType.BaseWidth] = 
+                    new ParameterValue(70, 100, 85);
+                _parameters.AllParameters[ParameterType.BodyRadius1] = 
+                    new ParameterValue(300, 350, 320);
+                _parameters.AllParameters[ParameterType.HandleRadius3] = 
+                    new ParameterValue(10, 20, 15);
+                _parameters.AllParameters[ParameterType.HandleRadius5] = 
+                    new ParameterValue(75, 85, 80);
+                _parameters.AllParameters[ParameterType.BodyLength] = 
+                    new ParameterValue(100, 150, 120);
             }
             
             comboBox1.SelectedIndex = 2;
@@ -68,7 +74,8 @@ namespace MugPlugin
         }
 
         /// <summary>
-        /// Проверяет поля ввода на наличие ошибок, отображает соответствующие сообщения.
+        /// Проверяет поля ввода на наличие ошибок, отображает 
+        /// соответствующие сообщения.
         /// </summary>
         /// <returns>True, если есть ошибки, иначе false.</returns>
         private bool CheckTextBox()
@@ -97,12 +104,18 @@ namespace MugPlugin
 
             var textBoxToParameterMapping = new Dictionary<System.Windows.Forms.TextBox, (string ErrorMessage, ParameterValue Range)>
             {//TODO: RSDN
-                  { diameterD1_textBox, ($"Диаметр кружки должен быть между {{0}} мм - {{1}} мм", diameterD1Range) },
-                  { diameterD4_textBox, ($"Диаметр основания кружки должен быть между {{0}} мм - {{1}} мм, и меньше чем диаметр кружки", diameterD4Range) },
-                  { radiusR1_textBox, ($"Радиус кривизны до верха кружки должен быть между {{0}} мм - {{1}} мм", radiusR1Range) },
-                  { radiusR3_textBox, ($"Радиус 1-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR3Range) },
-                  { radiusR5_textBox, ($"Радиус 3-й кривизны запястья кружки должен быть между {{0}} мм - {{1}} мм", radiusR5Range) },
-                  { L_textBox, ($"Высота кружки должна быть между {{0}} мм - {{1}} мм, и больше чем диаметр кружки", heightRange) }
+                  { diameterD1_textBox, ($"Диаметр кружки должен быть " +
+                  $"между {{0}} мм - {{1}} мм", diameterD1Range) },
+                  { diameterD4_textBox, ($"Диаметр основания кружки должен быть " +
+                  $"между {{0}} мм - {{1}} мм, и меньше чем диаметр кружки", diameterD4Range) },
+                  { radiusR1_textBox, ($"Радиус кривизны до верха кружки должен быть " +
+                  $"между {{0}} мм - {{1}} мм", radiusR1Range) },
+                  { radiusR3_textBox, ($"Радиус 1-й кривизны запястья кружки должен " +
+                  $"быть между {{0}} мм - {{1}} мм", radiusR3Range) },
+                  { radiusR5_textBox, ($"Радиус 3-й кривизны запястья кружки должен " +
+                  $"быть между {{0}} мм - {{1}} мм", radiusR5Range) },
+                  { L_textBox, ($"Высота кружки должна быть между {{0}} мм - {{1}} мм, " +
+                  $"и больше чем диаметр кружки", heightRange) }
             };
 
             foreach (var entry in textBoxToParameterMapping)
@@ -120,7 +133,8 @@ namespace MugPlugin
                         case var _ when textBox == radiusR3_textBox:
                         case var _ when textBox == radiusR5_textBox:
                         case var _ when textBox == L_textBox:
-                            errorMessages.Add(string.Format(errorMessageTemplate, range.MinValue, range.MaxValue));
+                            errorMessages.Add(string.Format(errorMessageTemplate, 
+                                range.MinValue, range.MaxValue));
                             break;
                     }
                 }
@@ -146,7 +160,8 @@ namespace MugPlugin
         private bool CheckComboBoxSelection()
         {
             // Список допустимых значений
-            List<string> validItems = new List<string> { "Блюдце", "Блюдце и под чашкой", "Ничего" };
+            List<string> validItems = new List<string> { "Блюдце", "Блюдце и под " +
+                "чашкой", "Ничего" };
 
             // Проверяем, содержится ли выбранный элемент в списке допустимых значений
             if (!validItems.Contains(comboBox1.SelectedItem?.ToString()))
@@ -158,7 +173,8 @@ namespace MugPlugin
 
         /// <summary>
         /// Обработчик события для кнопки создания.
-        /// Проверяет цвета фонов текстовых полей и, если все они корректны, вызывает метод построения.
+        /// Проверяет цвета фонов текстовых полей и, если все они корректны, 
+        /// вызывает метод построения.
         /// </summary>
         /// <param name="sender">Источник события.</param>
         /// <param name="e">Аргументы события.</param>
@@ -216,14 +232,16 @@ namespace MugPlugin
             if (!CheckComboBoxSelection())
             {
                 hasError = true;
-                errorMessage += "• Некорректный выбор в ComboBox. Пожалуйста, выберите допустимый вариант.\n";
+                errorMessage += "• Некорректный выбор в ComboBox. Пожалуйста, " +
+                    "выберите допустимый вариант.\n";
             }
 
             // Если ошибки обнаружены, показываем сообщение с красным крестом
             if (hasError)
             {
                 // Показать MessageBox с ошибками
-                MessageBox.Show(errorMessage, "Ошибки при вводе данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(errorMessage, "Ошибки при вводе данных", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -469,7 +487,8 @@ namespace MugPlugin
             }
 
             double D1 = 0;
-            if (!double.TryParse(this.diameterD1_textBox.Text, out D1) && parameterType != ParameterType.BodyWidth)
+            if (!double.TryParse(this.diameterD1_textBox.Text, out D1) 
+                && parameterType != ParameterType.BodyWidth)
             {
                 // Установить красный цвет
                 BackColor(parameterType, 2); 
@@ -543,11 +562,11 @@ namespace MugPlugin
         {
             if (comboBox1.SelectedIndex == -1 || comboBox1.SelectedIndex == 2)
             {
-                Flags.flag = -1;
+                Parameters.Flags.flag = -1;
                 return;
             }
 
-            Flags.flag = comboBox1.SelectedIndex;
+            Parameters.Flags.flag = comboBox1.SelectedIndex;
             MessageBox.Show($"Будет построенно: {comboBox1.SelectedItem}.");
         }
 
@@ -558,12 +577,12 @@ namespace MugPlugin
         {
             if (checkBox1.Checked)
             {
-                Flags.krishka = true;
+                Parameters.Flags.krishka = true;
                 MessageBox.Show($"Будет построенно: {checkBox1.Text}.");
             }
             else
             {
-                Flags.krishka = false;
+                Parameters.Flags.krishka = false;
             }
         }
     }

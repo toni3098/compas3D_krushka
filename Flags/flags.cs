@@ -1,4 +1,6 @@
-﻿namespace MugPlugin
+﻿
+/*
+namespace MugPlugin
 {
     //TODO: refactor to parameters
     /// <summary>
@@ -13,3 +15,4 @@
         public static bool krishka = false;
     }
 }
+*/
